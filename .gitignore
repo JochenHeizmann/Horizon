@@ -1,0 +1,5 @@
+.DS_Store
+*.app
+*.bak
+.bmx
+Thumbs.DB
