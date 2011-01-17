@@ -169,7 +169,7 @@ Type TSceneGame Extends TScene
 		buttons[BTN_OK].SetText("Okay")
 		buttons[BTN_OK].SetFont(fontMedium)
 				
-		InitLevel(0)
+		InitLevel(5)
 	End Method	
 	
 	Method OnLeave()

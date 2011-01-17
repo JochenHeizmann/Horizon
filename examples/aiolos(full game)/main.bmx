@@ -29,8 +29,8 @@ TApplication.SetName("Aiolos")
 
 Local myApp:TApplication = TApplication.GetInstance()
 myApp.AddFader(New TFaderBrightness)
-myApp.AddScene(New TSceneGame, "game")
 myApp.AddScene(New TSceneSplashScreen, "splashScreen")
+myApp.AddScene(New TSceneGame, "game")
 myApp.AddScene(New TSceneMainMenu, "mainMenu")
 myApp.Run()
 
