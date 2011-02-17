@@ -9,19 +9,23 @@ Import "InputControllerMouse.bmx"
 Type TGuiWidgetImagebutton Extends TGuiWidget
 	
 	Field img:TImage
+	Field noDownImage:Byte
 	
-	Function Create:TGuiWidgetImagebutton(imageFilename:String, x:Int, y:Int)
+	Function Create:TGuiWidgetImagebutton(imageFilename:String, x:Int, y:Int, noDownImage:Int = False)
 		Local instance:TGuiWidgetImagebutton = New TGuiWidgetImagebutton
 		instance.x = x
 		instance.y = y
 		
 		Local tmpImg:TImage = LoadImage(imageFilename)
 		If (Not tmpimg) Then RuntimeError("Image " + imageFilename + " couldn't be loaded!")
-		Local frameWidth:Int = ImageWidth(tmpImg) / 3
+		Local numImages : Int = 3
+		If noDownImage Then numImages = 2
+		Local frameWidth:Int = ImageWidth(tmpImg) / numImages
 		Local frameHeight:Int = ImageHeight(tmpImg)
 		instance.w = frameWidth
 		instance.h = frameHeight
-		instance.img = LoadAnimImage(imageFilename, frameWidth, frameHeight, 0, 3)
+		instance.noDownImage = noDownImage
+		instance.img = LoadAnimImage(imageFilename, frameWidth, frameHeight, 0, numImages)
 		Return instance
 	End Function
 	
@@ -31,7 +35,7 @@ Type TGuiWidgetImagebutton Extends TGuiWidget
 			Case HOVER
 				frame = 1
 			Case DOWN
-				frame = 2
+				If (noDownImage) Then frame = 1 Else frame = 2
 			Default
 				frame = 0
 		End Select
