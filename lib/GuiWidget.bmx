@@ -13,7 +13,8 @@ Type TGuiWidget
 	Field w:Int, h:Int
 	Field parent:TGuiWidget
 	Field childs:TList
-	Field visible:Byte
+	Field visible:Byte	
+	Field hitboxTolerance : Int
 
 	Const NORMAL:Int = 0
 	Const HOVER:Int = 1
@@ -60,7 +61,7 @@ Type TGuiWidget
 	End Method
 	
 	Method IsMouseOverWidgetPosition:Byte()	
-		Return (MouseX() >= GetX() And MouseX() <= (GetX() + w) And MouseY() >= GetY() And MouseY() <= (GetY() + h))
+		Return (MouseX() >= GetX() + hitboxTolerance And MouseX() <= (GetX() + w - hitboxTolerance) And MouseY() >= GetY() + hitboxTolerance  And MouseY() <= (GetY() + h) - hitboxTolerance)
 	End Method
 	
 	Method DestroyChilds()
@@ -73,6 +74,7 @@ Type TGuiWidget
 	Method New()
 		visible = True
 		childs = CreateList()
+		hitboxTolerance = 0
 	End Method
 	
 	Method Hide()
