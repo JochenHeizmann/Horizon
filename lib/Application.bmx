@@ -234,6 +234,7 @@ Type TApplication
 				SetAlpha(alpha)
 			?
 			
+			If AppTerminate() Then Leave()
 			Flip(vSync)
 			
 			sleepTime = nextGameTick - MilliSecs()
