@@ -12,7 +12,7 @@ Type TBitmapFont
 	Field FrameWidth:Int, FrameHeight:Int
 
 	Method Load(File:String)
-		Local Infostream:TStream = ReadFile(File + ".fnt")
+		Local Infostream:TStream = ReadFile(File)
 		
 		If (Infostream)
 			Local s:String = File + ".png"
