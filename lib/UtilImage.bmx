@@ -16,6 +16,10 @@ Type TUtilImage
 	End Function
 
 	Function DrawRepeated(img:TImage, x:Int, y:Int, w:Int, h:Int, frame:Int = 0)
+	
+		If x < 0 Then w :+ x ; x = 0
+		If y < 0 Then h :+ y ; y = 0
+	
 		Local oldViewportX:Int, oldViewportY:Int, oldViewportW:Int, oldViewportH:Int
 		Local viewportX:Int, viewportY:Int, viewportW:Int, viewportH:Int
 		GetViewport(oldViewportX, oldViewportY, oldViewportW, oldViewportH)

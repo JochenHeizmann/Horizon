@@ -15,6 +15,10 @@ Type TInputControllerMouse
 	Field buttonDown:Int[NUM_BUTTONS]
 	Field mouseWheel:Int, oldMouseWheel:Int 
 	
+	Field mx : Int, my : Int
+	Field oldMx : Int, oldMy : Int
+	Field dx : Int, dy : Int
+	
 	Function GetInstance:TInputControllerMouse()
 		If Not Self.instance
 			Self.instance = New Self
@@ -23,9 +27,35 @@ Type TInputControllerMouse
 	End Function
 	
 	Method Refresh()
+		RefreshMouseCoords()
 		RefreshMouseHit()
 		RefreshMouseUp()
 		RefreshMouseWheel()
+	End Method
+	
+	Method RefreshMouseCoords()
+		oldMx = mx
+		oldMy = my
+		mx = MouseX()
+		my = MouseY()
+		dx = oldMx - mx
+		dy = oldMy - my
+	End Method
+	
+	Method GetX : Int()
+		Return mx
+	End Method
+	
+	Method GetY : Int()
+		Return my
+	End Method
+	
+	Method GetDX : Int()
+		Return dx
+	End Method
+	
+	Method GetDY : Int()
+		Return dy
 	End Method
 	
 	Method RefreshMouseUp()
