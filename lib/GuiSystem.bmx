@@ -78,6 +78,7 @@ Type TGuiSystem
 		
 		If (selectedElement And mouse.IsMouseUp(mouse.BUTTON_LEFT))
 			selectedElement.OnMouseUp()
+			If (topElement = selectedElement) Then selectedElement.OnMouseClick()
 			selectedElement = Null
 		End If			
 		

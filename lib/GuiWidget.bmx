@@ -103,6 +103,9 @@ Type TGuiWidget Extends TGuiBase
 	Method OnRMouseDown()
 	End Method
 	
+	Method OnMouseClick()
+	End Method
+	
 	Method OnMove()
 		rect.Move(-TInputControllerMouse.GetInstance().GetDX(), -TInputControllerMouse.GetInstance().GetDY())
 	End Method

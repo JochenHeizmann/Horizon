@@ -7,7 +7,7 @@ Import "../../../lib/Application.bmx"
 Type TSceneBitmapText Extends TScene
 	Field bg:TImage
 	Field c:Float = 0
-	Field font:TBitmapFont
+	Field font:TImageFont
 	
 	Method Update()
 		c :+ (1)
@@ -28,7 +28,8 @@ Type TSceneBitmapText Extends TScene
 
 		SetColor(Sin(c) * 255, 255, Cos(c) * 255)
 		SetRotation(0)
-		font.Draw("This is bitmap text", 10, 50)
+		SetImageFont(font)
+		DrawText("This is bitmap text", 10, 50)
 
 		SetColor(255,0,0)
 		DrawOval(MouseX(), MouseY(), 50, 50)
@@ -37,8 +38,8 @@ Type TSceneBitmapText Extends TScene
 	Method OnEnter()
 		HideMouse
 		bg = LoadImage("data/bg.jpg")
-		font = New TBitmapFont
-		font.Load("data/Font30White.fnt")
+		font = TBitmapFont.Load("data/font_blood.png")
+		If (Not font) DebugLog "no font"
 	End Method
 	
 	Method OnLeave()

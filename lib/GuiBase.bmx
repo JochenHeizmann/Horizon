@@ -17,6 +17,7 @@ Type TGuiBase
 	Method OnMouseUp() Abstract
 	Method OnActivate() Abstract
 	Method OnMouseMove(dx : Int, dy : Int) Abstract
+	Method OnMouseClick() Abstract
 
 	Method Hide()
 		visible = False
