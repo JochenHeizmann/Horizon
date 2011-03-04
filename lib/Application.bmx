@@ -200,6 +200,7 @@ Type TApplication
 			nextGameTick :+ skipTicks
 			
 			?Debug
+				SetImageFont(Null)
 				Local alpha:Float = GetAlpha()
 				If (KeyDown(KEY_TAB))
 					SetAlpha(0.8)
@@ -240,7 +241,7 @@ Type TApplication
 			sleepTime = nextGameTick - MilliSecs()
 			If (sleepTime > 0)
 				Delay(sleepTime)
-			End If			
+			End If
 		Wend
 		
 		CleanUp()

@@ -1,170 +1,342 @@
+SuperStrict
 
-SuperStrict 
+Rem
 
-Import BRL.FileSystem
-Import BRL.PNGLoader
-Import BRL.Max2D
-Import BRL.Retro
+This code is based / is from the great blitz module chaos.bmpfont, Version: 1.13
+
+
+Author: d-bug / YellowRider
+License: Public Domain
+Contact: d-bug@chaos-interactive.de
+Homepage: www.chaos-interactive.de
+End Rem
+
+
+Import brl.max2d
+Import brl.pngloader
+Import brl.standardio
+Import brl.endianstream
+
+'-- KONSTANTEN -------------------------------------------------------------------------------------------------------------
+Const STATICFONT:Int	= 1
+Const BITMAPFONT:Int 	= 1024
+Const SUCOFONT:Int		= 2048
+Const CANDYFONT:Int	= 4096
+
+AddFontLoader New TChaosFontLoader
 
 Type TBitmapFont
-	Field FontImage:TImage
-	Field CharW:Int[255], CharH:Int[255]	
-	Field FrameWidth:Int, FrameHeight:Int
-
-	Method Load(File:String)
-		Local Infostream:TStream = ReadFile(File)
-		
-		If (Infostream)
-			Local s:String = File + ".png"
-			Local w:Int = ReadInt(Infostream)
-			Local h:Int = ReadInt(Infostream)
-			Local f:Int = ReadInt(Infostream) ' Frames
-			
-			FrameWidth = w-32
-			FrameHeight = h-32
-			
-			AutoMidHandle(False)
-			FontImage = LoadAnimImage(s,w,h,0,f)
-			
-			For Local i:Int=31 To 255
-				CharW[i-31] = ReadInt(Infostream)
-				CharH[i-31] = ReadInt(Infostream)
-			Next	
+	Function Load:TImageFont (url:Object, style:Int = SMOOTHFONT, charspacing:Int = 0)
+		TChaosFontLoader.CharList = String(url)[0..String(url).FindLast(".")]+".suc"
+		If ValidatePath(TChaosFontLoader.CharList) = "failed" 
+			TChaosFont.Error("File "+TChaosFontLoader.CharList+" Not found...")
+			Return Null
+		EndIf
+		If style & SMOOTHFONT
+			TChaosFontLoader.ImageFlags = FILTEREDIMAGE|MIPMAPPEDIMAGE|MASKEDIMAGE
 		Else
-			RuntimeError("File " + File + "couldn't be loaded!")	
-		End If
-	End Method
-	
-	Method Draw(t:String,x:Float, y:Float, center:Byte = False, laufweite:Float = 1.0)
-		x:-16
-		y:-16
-		If (FontImage)
-			Local offx:Int = 0
-						
-			If (center)
-				Local w:Int = 0, h:Int = 0
-				For Local i:Int = 1 To t.length
-					Local charNo:Int = Asc(Mid(t,i,1))-31
-					If (charNo >= CharW.length Or charNo < 0) Then Continue
-					w:+(laufweite*CharW[charNo])
-					If CharH[Asc(Mid(t,i,1))-31]>h Then h=CharH[Asc(Mid(t,i,1))-31]
-				Next
-				x:-(w/2)
-				y:-(h/2)
-			End If
-			
-			For Local i:Int = 1 To t.length
-					Local charNo:Int = Asc(Mid(t,i,1))-31
-					If (charNo >= CharW.length Or charNo < 0) Then Continue
-					DrawImage (FontImage,x+offx,y,charNo)
-					offx:+(laufweite*CharW[charNo])		
-			Next
-		End If
-	End Method
-	
-	Method GetWidth:Int(t:String)
-		If (FontImage)
-			Local offx:Int = 0			
-			Local w:Int = 0
-			
-			For Local i:Int = 1 To t.length
-				w:+CharW[Asc(Mid(t,i,1))-31]
-			Next
-			
-			Return w			
-		End If
-	End Method	
-	
-	Method Create(FromFont:TImageFont, File:String)
-		SetImageFont FromFont	
-		Local width:Float = 0, height:Float = 0
-		FrameWidth = 0
-		FrameHeight = 0
-		
-		For Local i:Int=31 To 255
-			CharW[i-31] = TextWidth(Chr(i))+32
-			CharH[i-31] = TextHeight(Chr(i))+32
-			
-			If (CharW[i-31]>FrameWidth) Then FrameWidth=CharW[i-31]
-			If (CharH[i-31]>FrameHeight) Then FrameHeight=CharH[i-31]
-			
-			If (CharH[i-31]>height) Then height=CharH[i-31]
-			width:+CharW[i-31]			
-		Next
-		
-		If (FrameWidth>FrameHeight) Then FrameHeight=FrameWidth
-		If (FrameHeight>FrameWidth) Then FrameWidth=FrameHeight
-		
-		Local offx:Int = 1
-		Local offy:Int = 1
-		Local xpos:Int = 0
-		
-		For Local i:Int=31 To 255			
-			If offx*FrameWidth>6000
-				xpos=offx
-				offx=0
-				offy:+1
-			End If				
-			
-			offx:+1
-		Next
-		
-		Local pix:TPixmap = CreatePixmap(FrameWidth*xpos,FrameHeight*offy,PF_RGBA8888)
-		
-		SetClsColor 0,0,0
-		SetColor 255,255,255
-		SetBlend(ALPHABLEND)
-		
-		offx=0		
-		offy=0
-		
-		For Local i:Int=31 To 255		
-			CharW[i-31]:-32
-			CharH[i-31]:-32
-			
-			If offx>6000
-				offx=0
-				offy:+FrameHeight
-			End If
+			TChaosFontLoader.ImageFlags = MASKEDIMAGE
+		EndIf
+		TChaosFontLoader.Flags = SUCOFONT
+		TChaosFontLoader.charspacing = charspacing
+		Return TImageFont.Load(url,0,style)
+	EndFunction
 
-			Cls
-			DrawText Chr(i),16,16
-			Local s:String=Chr(i)
-			Local charpixmap:TPixmap = CreatePixmap(FrameWidth,FrameHeight,PF_RGBA8888)
-			charpixmap = GrabPixmap(0,0,FrameWidth, FrameHeight)
-			
-			For Local x:Int=0 To FrameWidth-1
-				For Local y:Int=0 To FrameHeight-1
-					Local pixel:Int = ReadPixel(charpixmap,x,y)
-					pixel = (((pixel Shr 16) & $ff) Shl 24) | (255 Shl 16) | (255 Shl 8) | (255 & $ff)
+	Function LoadBitmapFont:TImageFont (url:Object, tilewidth:Int, tileheight:Int, spacesize:Int, charlist:String ,charspacing:Int = 2,flags:Int = 0)
+		TChaosFontLoader.CharList = charlist
+		TChaosFontLoader.SpaceSize = spacesize
+		TChaosFontLoader.TileHeight = tileheight
+		TChaosFontLoader.ImageFlags = MASKEDIMAGE|FILTEREDIMAGE|MIPMAPPEDIMAGE
+		TChaosFontLoader.Flags = flags
+		TChaosFontLoader.Flags:|BITMAPFONT
+		TChaosFontLoader.charspacing = charspacing
+		Return TImageFont.Load(url,tilewidth,SMOOTHFONT)
+	EndFunction
 
-					If PixmapWidth(pix)>offx And PixmapHeight(pix)>y+offy
-						WritePixel(pix,offx,offy + y,pixel)
-						If i=255
-							pixel = $FF00FF00
-							WritePixel(pix,offx,offy+y,pixel)
-						End If
-					End If
-				Next
-				offx:+1
-			Next
-			
-		Next
-		
-		SavePixmapPNG(pix,File + ".png", 9)
-		
-		Local Infostream:TStream = WriteFile(File)
-		If Infostream
-			WriteInt(Infostream,FrameWidth)
-			WriteInt(Infostream,FrameHeight)
-			WriteInt(Infostream,224) ' Frames
-			
-			For Local i:Int=31 To 255
-				WriteInt(Infostream, CharW[i-31])
-				WriteInt(Infostream, CharH[i-31])
-			Next
-			
-			CloseFile(Infostream)
-		End If
-	End Method
+	Function LoadCandy:TImageFont (url:Object, style:Int = SMOOTHFONT, charspacing:Int = 0)
+		TChaosFontLoader.CharList = String(url)[0..String(url).FindLast(".")]+".dat"
+		If ValidatePath(TChaosFontLoader.CharList) = "failed" 
+			TChaosFont.Error("File "+TChaosFontLoader.CharList+" Not found...")
+			Return Null
+		EndIf
+		If style & SMOOTHFONT
+			TChaosFontLoader.ImageFlags = FILTEREDIMAGE|MIPMAPPEDIMAGE|MASKEDIMAGE
+		Else
+			TChaosFontLoader.ImageFlags = MASKEDIMAGE
+		EndIf
+		TChaosFontLoader.Flags = CANDYFONT
+		TChaosFontLoader.charspacing = charspacing
+		Return TImageFont.Load(url,0,style)
+	EndFunction
 End Type
+
+'-- INTERNE FUNKTIONEN ---------------------------------------------------------------------------------------------------
+Private
+
+Function ValidatePath:String (url:String)
+	url = url.ToLower()
+	If url.Find("incbin::") = -1
+		FixPath(url)
+		If FileType(url) Then Return url
+	Else
+		Print url
+		Return url
+	EndIf
+	Return "failed"
+EndFunction
+
+Function StripSuffix:String (url:String)
+	If url.FindLast(".") <> -1 Return url[url.FindLast(".")..]
+	Return "failed"
+EndFunction
+	
+Type TChaosFontGlyph Extends BRL.Font.TGlyph
+	Field G_Pixmap:TPixmap
+	Field G_Advance:Float
+	Field G_X:Int
+	Field G_Y:Int
+	Field G_Width:Int
+	Field G_Height:Int
+
+	Method Pixels:TPixmap ()
+		Return Self.G_Pixmap
+	EndMethod
+
+	Method Advance:Float ()
+		Return Self.G_Advance
+	EndMethod
+
+	Method GetRect (x:Int Var, y:Int Var, width:Int Var, height:Int Var)
+		x		= Self.G_X
+		y		= Self.G_Y
+		width	= Self.G_Width
+		height	= Self.G_Height
+	EndMethod	
+EndType
+
+Type TChaosFont Extends BRL.Font.TFont
+	Field NullGlyph:TChaosFontGlyph = New TChaosFontGlyph
+	Field Glyphs:TChaosFontGlyph[]
+	Field FontHeight:Int
+	Field ImageFlags:Int
+	Field Flags:Int
+
+	Method Style:Int ()
+		If Self.Flags & SUCOFONT Return SUCOFONT
+		If Self.Flags & CANDYFONT Return CANDYFONT
+		If Self.Flags & STATICFONT Return STATICFONT|BITMAPFONT
+		Return BITMAPFONT
+	EndMethod
+
+	Method Height:Int ()
+		Return Self.FontHeight
+	EndMethod
+
+	Method CountGlyphs:Int ()
+		Return Self.Glyphs.Length
+	EndMethod
+
+	Method CharToGlyph:Int (char:Int)
+		If char > 31 And char < 255 Return char-32
+		Return -1
+	EndMethod
+
+	Method LoadGlyph:TGlyph (index:Int)
+		If Self.Glyphs[Index] Return Self.Glyphs[Index]
+		Return Self.NullGlyph
+	EndMethod
+
+	'Spezieller Loader für BMP und PNG Fonts
+	'url			= Pfad zum Image
+	'tilesize		= Größer der Tiles (16x16, 32x32 usw.)
+	'spacesize	= Größe eines Leerzeichens
+	'charlist		= Alle Zeichen des Fonts in Reihenfolge der Tiles
+	'flags		= Siehe BRL.LoadImage
+	'static		= Zeichenabmaße statisch (Breite und Höhe werden als tilesize gesetzt)
+	Function Load:TChaosFont (url:String, tilewidth:Int, tileheight:Int, spacesize:Int, charlist:String, charspacing:Int, imageflags:Int, flags:Int) 
+		If ValidatePath(url) = "failed" 
+			TChaosFont.Error("File "+url+" Not found...")
+			Return Null
+		EndIf
+		Local font:TChaosFont = New TChaosFont
+		font.Glyphs = New TChaosFontGlyph[255]
+		font.Imageflags = imageflags
+		font.Flags = flags
+		If font.Flags & BITMAPFONT
+			font = TChaosFont.AutoSizedFontLoader (font, url, tilewidth, tileheight, spacesize, charlist, charspacing)
+		ElseIf font.Flags = SUCOFONT
+			font = TChaosFont.SucoFontLoader (font, url, charlist, charspacing)
+		ElseIf font.Flags = CANDYFONT
+			font = TChaosFont.FontCandyLoader (font, url, charlist, charspacing)
+		EndIf
+		Return font
+	EndFunction
+
+	'Fontloader für FontCandy
+	Function FontCandyLoader:TChaosFont (font:TChaosFont, url:String, charlist:String, charspacing:Int)
+		Local stream:TStream = ReadFile(charlist)
+		If Not stream Return Null
+
+		'--------------------------------- BugFix 1.12
+		?MacOSPPC
+				stream = LittleEndianStream (stream)
+		?
+		'-------------------------------------------
+
+		stream.ReadInt()
+		stream.ReadInt()
+		Local mask_R:Int = stream.ReadInt()
+		Local mask_G:Int = stream.ReadInt()
+		Local mask_B:Int = stream.ReadInt()
+		Local max_index:Int = stream.ReadInt() 
+		font.Fontheight = Stream.ReadInt()
+		TChaosFont.CreateSpace (font, Stream.ReadInt())
+		stream.ReadInt()
+		Local Image:TImage = TImage.Load (url,font.imageflags,mask_R,mask_G,mask_B)
+		For Local index:Int = 0 To max_index
+			Local ascii:Int = Stream.ReadInt()
+			Local glyph_x:Int = Stream.ReadInt()
+			Local glyph_y:Int = Stream.ReadInt()
+			Local glyph_width:Int = Stream.ReadInt()
+			If (ascii > 31) And (ascii < 255)
+				font.Glyphs[ascii - 32] = New TChaosFontGlyph
+				font.Glyphs[ascii - 32].G_Pixmap = image.pixmaps[0].Window(glyph_x,glyph_y,glyph_width,font.Fontheight).Copy()
+				font.Glyphs[ascii - 32].G_Width = glyph_width
+				font.Glyphs[ascii - 32].G_Height = font.Fontheight
+				font.Glyphs[ascii - 32].G_Advance = glyph_width + charspacing
+			EndIf
+			Next
+		stream.close()
+		Return font
+	EndFunction
+
+	'Fontloader für Suco-X' Fontextractor Files (*.suc)
+	Function SucoFontLoader:TChaosFont (font:TChaosFont, url:String, charlist:String, charspacing:Int)
+		Local stream:TStream = ReadFile(charlist)
+		If Not stream Return Null
+
+		'--------------------------------- BugFix 1.12
+		?MacOSPPC
+ 				stream = LittleEndianStream (stream)
+		?
+		'-------------------------------------------
+
+		Local CellCount:Int = Stream.ReadInt()
+		Local CellSize:Int = Stream.ReadInt()
+		font.Fontheight = Stream.ReadInt()
+		TChaosFont.CreateSpace (font, Stream.ReadInt())
+		Local Image:TImage = .LoadAnimImage (url,CellSize,CellSize,0,CellCount,font.imageflags)
+		Local i:Int
+		While Not Stream.Eof()
+			Local ascii:Int = Stream.ReadInt()
+			Local txtw:Int = Stream.ReadInt()
+			Local txth:Int = Stream.ReadInt()
+			Local offx:Int = Stream.ReadFloat()
+			Local offy:Int = Stream.ReadFloat()
+			Local advance:Float = Stream.ReadFloat()
+			If (ascii > 31) And (ascii < 255)
+				font.Glyphs[ascii - 32] = New TChaosFontGlyph			
+				font.Glyphs[ascii - 32].G_Pixmap = image.pixmaps[i].Copy()
+				font.Glyphs[ascii - 32].G_Width = txtw
+				font.Glyphs[ascii - 32].G_Height = txth
+				font.Glyphs[ascii - 32].G_X = -offx
+				font.Glyphs[ascii - 32].G_Y = -offy
+				font.Glyphs[ascii - 32].G_Advance = advance + charspacing
+				i :+ 1
+			EndIf
+		Wend
+		stream.close()
+		Return font
+	EndFunction
+
+	'Standard Loader
+	Function AutoSizedFontLoader:TChaosFont (font:TChaosFont, url:String, tilewidth:Int, tileheight:Int, spacesize:Int, charlist:String, charspacing:Int)
+		Local image:TImage = .LoadAnimImage (url,tilewidth,tileheight,0,charlist.length,font.imageflags)
+		TChaosFont.CreateSpace (font, spacesize)
+		For Local i:Int = 0 Until charlist.length
+			Local ascii:Int = Asc(charlist[i..i+1])
+			If (ascii > 31) And (ascii < 255)
+				'Local index:Int = ascii - 32
+				font.Glyphs[ascii - 32] = New TChaosFontGlyph
+				font.Glyphs[ascii - 32].G_Pixmap = image.pixmaps[i].Copy()
+				Local x:Int, y:Int
+				Local StartX:Int, EndX:Int
+				Local StartY:Int, EndY:Int
+				If font.flags & STATICFONT
+					font.Glyphs[ascii - 32].G_Width = tilewidth
+					font.Glyphs[ascii - 32].G_Height = tileheight
+					font.Glyphs[ascii - 32].G_X = 0
+					font.Glyphs[ascii - 32].G_Y = -tileheight
+					font.Glyphs[ascii - 32].G_Advance = tilewidth
+					font.FontHeight = tileheight
+				Else
+					For y = 0 Until tileheight
+						For x = 0 Until tilewidth
+							If ((font.Glyphs[ascii - 32].G_Pixmap.ReadPixel(x,y) Shr 24) & $FF) > $00
+								If StartX = 0 Or StartX < x StartX = x
+								EndIf
+								If ((font.Glyphs[ascii - 32].G_Pixmap.ReadPixel(tilewidth - x - 1,y) Shr 24) & $FF) > $00
+									If EndX = 0 Or EndX > (tilewidth - x - 1) EndX = (tilewidth - x - 1)
+									EndIf
+						Next
+					Next
+					font.Glyphs[ascii - 32].G_Width = StartX - EndX
+					font.Glyphs[ascii - 32].G_Height = tileheight
+					font.Glyphs[ascii - 32].G_X = -EndX
+					font.Glyphs[ascii - 32].G_Y = -tileheight
+					font.Glyphs[ascii - 32].G_Advance = font.Glyphs[ascii - 32].G_Width + charspacing 
+				EndIf
+			EndIf
+		Next
+		font.FontHeight = tileheight
+		image = Null
+		Return font
+	EndFunction
+
+
+	'Leerzeichen erstellen und in das Glypharray eintragen
+	Function CreateSpace (font:TChaosFont, spacesize:Int)
+		font.Glyphs[0] = New TChaosFontGlyph
+		font.Glyphs[0].G_Advance = spacesize
+		font.Glyphs[0].G_X = 0
+		font.Glyphs[0].G_Y = 0
+		font.Glyphs[0].G_Width = spacesize
+		font.Glyphs[0].G_Height = 1
+		font.Glyphs[0].G_Pixmap = TPixmap.Create (font.Glyphs[0].G_Width,font.Glyphs[0].G_Height,PF_RGBA8888)
+		For Local sx:Int = 0 To spacesize
+			Local p:Byte Ptr = font.Glyphs[0].G_Pixmap.PixelPtr(sx,0)
+			p[3] = $00
+		Next
+	EndFunction
+
+	Function Error (Message:String)
+		Message = "ChaosFont @ "+MilliSecs()+" > ERROR: "+Message
+		?Debug
+			Print Message
+			Return
+		?
+		Notify Message
+		Return
+	EndFunction
+EndType
+
+'-----------------------------------------------------------------------------------------------------------------------------
+'Neuen Fontloader im System etablieren, der BMP, JPG, TGA und PNG Dateien umleitet.
+'Alle weiteren Fonts werden weiterhin mit dem FreeTypeFontLoader geladen.
+Type TChaosFontLoader Extends TFontLoader
+	Global CharList:String
+	Global charspacing:Int
+	Global SpaceSize:Int
+	Global ImageFlags:Int
+	Global Flags:Int
+	Global TileHeight:Int
+
+	Method LoadFont:TChaosFont (url:Object, size:Int, style:Int = SMOOTHFONT)
+		Local src:String = String(url)
+		If src
+			Select StripSuffix(src)
+				Case ".png",".bmp",".tga",".jpg" ; Return TChaosFont.Load(src,size,TChaosFontLoader.TileHeight,TChaosFontLoader.SpaceSize,TChaosFontLoader.CharList,TChaosFontLoader.charspacing,TChaosFontLoader.ImageFlags,TChaosFontLoader.Flags)
+			End Select
+		EndIf
+	EndMethod
+EndType

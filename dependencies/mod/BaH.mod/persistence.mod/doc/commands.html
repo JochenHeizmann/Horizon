@@ -1,0 +1,176 @@
+<html><head><title>Persistence reference</title>
+<link rel=stylesheet Type=text/css href='../../../../doc/bmxstyle.css'>
+</head><body>
+<table width=100% cellspacing=0><tr align=center><td class=small>&nbsp;</td>
+<td class=small width=1%><b>BaH.Persistence:</b></td>
+<td class=small width=1%><a href=#types class=small>Types</a></td>
+<td class=small width=1%><a href=#modinfo class=small>Modinfo</a></td>
+<td class=small width=1%><a href='../../../../mod/bah.mod/persistence.mod/persistence.bmx' class=small>Source</a></td>
+<td class=small>&nbsp;</td></tr></table>
+<h1>Persistence</h1>
+An object-persistence framework.
+<p>Persistence is a means of storing data beyond the execution of a program, in such a way that the data can be reproduced, in memory, at a later time.</p>
+<p>The BaH.Persistence module attempts to do this through the use of reflection and xml.</p>
+<h3>Usage</h3>
+<p>
+The most simple usage is to pass an object into TPersist.Serialize(), which returns the serialized representation of it as a String.
+</p>
+<p>
+To reverse the process, the serialized String can be passed into TPersist.DeSerialize(), returning a new Object instance, which is essentially a "deep"
+copy of the original object.
+</p>
+<p>
+There are also methods, SerializeToFile(), SerializeToDoc(), and SerializeToStream() which output to different formats apporpriately.
+</p>
+<p>
+The DeSerialize() function itself can take a TxmlDoc, TStream or String data as a parameter, as well as there being the specialised methods of
+DeSerializeFromDoc(), DeSerializeFromFile(), and DeSerializeFromStream().
+</p>
+<p>
+</p>
+<h2><a name=types></a>Types Summary</h2><table class=doc width=100%>
+<tr><td class=docleft width=1%><a href=#TPersist>TPersist</a></td><td class=docright>
+Object Persistence.
+</td></tr>
+</table>
+<h2
+ id=typesdet>Types
+</h2>
+<table class=doc width=100% cellspacing=3 id=TPersist>
+<tr><td class=doctop colspan=2>Type TPersist</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Object Persistence.</td></tr>
+</table>
+<table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TPersist_consts></a>Constants Summary</th></tr><tr><td colspan=2>
+<a href=#BMO_VERSION>BMO_VERSION</a>
+</td></tr>
+</table>
+<table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TPersist_globals></a>Globals Summary</th></tr><tr><td colspan=2>
+<a href=#compressed>compressed</a>
+, 
+<a href=#format>format</a>
+, 
+<a href=#maxDepth>maxDepth</a>
+</td></tr>
+</table>
+<table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TPersist_methods></a>Methods Summary</th></tr>
+<tr><td class=docleft width=1%><a href=#DeSerializeFromDoc>DeSerializeFromDoc</a></td><td class=docright>
+De-serializes <b>doc</b> into an Object structure.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#DeSerializeFromFile>DeSerializeFromFile</a></td><td class=docright>
+De-serializes the file <b>filename</b> into an Object structure.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#DeSerializeFromStream>DeSerializeFromStream</a></td><td class=docright>
+De-serializes <b>stream</b> into an Object structure.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#DeSerializeObject>DeSerializeObject</a></td><td class=docright>
+&nbsp;
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SerializeObject>SerializeObject</a></td><td class=docright>
+&nbsp;
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SerializeToDoc>SerializeToDoc</a></td><td class=docright>
+Serializes an Object to a TxmlDoc structure.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SerializeToFile>SerializeToFile</a></td><td class=docright>
+Serializes an Object to the file <b>filename</b>.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SerializeToStream>SerializeToStream</a></td><td class=docright>
+Serializes an Object to a Stream.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SerializeToString>SerializeToString</a></td><td class=docright>
+Serializes an Object to a String.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ToString>ToString</a></td><td class=docright>
+Returns the serialized object as a string.
+</td></tr>
+</table>
+<table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TPersist_functions></a>Functions Summary</th></tr>
+<tr><td class=docleft width=1%><a href=#DeSerialize>DeSerialize</a></td><td class=docright>
+De-serializes <b>text</b> into an Object structure.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Serialize>Serialize</a></td><td class=docright>
+Serializes the specified Object into a String.
+</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=BMO_VERSION>
+<tr><td class=doctop colspan=2>Const BMO_VERSION:Int</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>File format version.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=compressed>
+<tr><td class=doctop colspan=2>Global compressed:Int</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Compressed serialization.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Set to True to compress the serialized data. Default is False - no compression.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=format>
+<tr><td class=doctop colspan=2>Global format:Int</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Serialized formatting.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Set to True to have the data formatted nicely. Default is False - off.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=maxDepth>
+<tr><td class=doctop colspan=2>Global maxDepth:Int</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Node-depth of XML to support when de-serializing.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Default is 1024.
+<p>
+If you have any problems with this, make it bigger.
+</p></td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=DeSerializeFromDoc>
+<tr><td class=doctop colspan=2>Method DeSerializeFromDoc:Object(xmlDoc:TxmlDoc)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>De-serializes <b>doc</b> into an Object structure.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>It is up to the user to free the supplied TxmlDoc.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=DeSerializeFromFile>
+<tr><td class=doctop colspan=2>Method DeSerializeFromFile:Object(filename:String)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>De-serializes the file <b>filename</b> into an Object structure.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=DeSerializeFromStream>
+<tr><td class=doctop colspan=2>Method DeSerializeFromStream:Object(stream:TStream)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>De-serializes <b>stream</b> into an Object structure.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=DeSerializeObject>
+<tr><td class=doctop colspan=2>Method DeSerializeObject:Object(text:String, parent:TxmlNode = Null)</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=SerializeObject>
+<tr><td class=doctop colspan=2>Method SerializeObject(obj:Object, parent:TxmlNode = Null)</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=SerializeToDoc>
+<tr><td class=doctop colspan=2>Method SerializeToDoc:TxmlDoc(obj:Object)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Serializes an Object to a TxmlDoc structure.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>It is up to the user to free the returned TxmlDoc object.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=SerializeToFile>
+<tr><td class=doctop colspan=2>Method SerializeToFile(obj:Object, filename:String)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Serializes an Object to the file <b>filename</b>.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=SerializeToStream>
+<tr><td class=doctop colspan=2>Method SerializeToStream(obj:Object, stream:TStream)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Serializes an Object to a Stream.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>It is up to the user to close the stream.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=SerializeToString>
+<tr><td class=doctop colspan=2>Method SerializeToString:String(obj:Object)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Serializes an Object to a String.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=ToString>
+<tr><td class=doctop colspan=2>Method ToString:String()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the serialized object as a string.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=DeSerialize>
+<tr><td class=doctop colspan=2>Function DeSerialize:Object(data:Object)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>De-serializes <b>text</b> into an Object structure.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Accepts a TxmlDoc, TStream or a String (of data).</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=Serialize>
+<tr><td class=doctop colspan=2>Function Serialize:String(obj:Object)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Serializes the specified Object into a String.</td></tr>
+</table>
+<br>
+<h2 id=modinfo>Module Information</h2>
+<table width=100%>
+<tr><th width=1%>Version</th><td>1.00</td></tr>
+<tr><th width=1%>Author</th><td>Bruce A Henderson</td></tr>
+<tr><th width=1%>License</th><td>MIT</td></tr>
+<tr><th width=1%>Copyright</th><td>2008-2010 Bruce A Henderson</td></tr>
+<tr><th width=1%>History</th><td>1.00</td></tr>
+<tr><th width=1%>History</th><td>Initial Release</td></tr>
+</body></html>
