@@ -47,15 +47,15 @@ Type TSceneMainMenu Extends TScene
 		
 		buttons[BTN_START] = TGuiWidgetTextButton.Create("incbin::../data/img/button_big.png", GraphicsWidth() / 2 - 200, GraphicsHeight() / 2 - 100, 400)
 		buttons[BTN_START].SetText("New game")
-		buttons[BTN_START].SetFont(fontBig)
+'		buttons[BTN_START].SetFont(fontBig)
 
 		buttons[BTN_EXIT] = TGuiWidgetTextButton.Create("incbin::../data/img/button_big.png", GraphicsWidth() / 2 - 200, GraphicsHeight() / 2 - 10, 400)
 		buttons[BTN_EXIT].SetText("Exit")
-		buttons[BTN_EXIT].SetFont(fontBig)
+'		buttons[BTN_EXIT].SetFont(fontBig)
 
 		buttons[BTN_URL] = TGuiWidgetTextButton.Create("incbin::../data/img/button_small.png", GraphicsWidth() - 390, GraphicsHeight() - 70, 380)
 		buttons[BTN_URL].SetText("intermediaware.com")
-		buttons[BTN_URL].SetFont(fontSmall)
+'		buttons[BTN_URL].SetFont(fontSmall)
 
 		background = LoadImage("incbin::../data/img/bg_mainmenu.png")
 		AutoMidHandle True
@@ -63,31 +63,30 @@ Type TSceneMainMenu Extends TScene
 	End Method	
 	
 	Method OnLeave()
+		buttons[BTN_START] = Null
+		buttons[BTN_EXIT] = Null
+		buttons[BTN_URL]  = Null
+		TGuiSystem.ClearWidgets()
 		SetClsColor(0,0,0)
 		Cls ; Flip
 	EndMethod
 	
 	Method Update()
+		TGuiSystem.ProcessMessages()
 		frameCounter :+ .5
 		If KeyDown(KEY_ESCAPE) Then TApplication.GetInstance().Leave()
 		
 		If buttons[BTN_URL].IsClicked() Then OpenURL("http://www.intermediaware.com") ; TApplication.GetInstance().Leave()
 		If buttons[BTN_EXIT].IsClicked() Or KeyDown(KEY_ESCAPE) Then TApplication.GetInstance().Leave()
 		If buttons[BTN_START].IsClicked() Then TApplication.GetInstance().SetNextScene("game")
-		
-		For Local i:Int = 0 To BTN_NUM - 1
-			buttons[i].Update()
-		Next		
-	End Method
+			End Method
 
 	Method Render()
 		Cls
 		SetAlpha(0.2)
 		TileImage background, Sin(frameCounter) * 200, Cos(frameCounter) * 200
 		SetAlpha(1)
-		For Local i:Int = 0 To BTN_NUM - 1
-			buttons[i].Render()
-		Next		
+		TGuiSystem.RenderAll()
 		DrawImage aiolos, GraphicsWidth() / 2 - 10, 100
 	End Method
 End Type

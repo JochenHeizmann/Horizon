@@ -24,6 +24,16 @@ Type TGuiSystem
 			If w.visible Then w.Render()
 		Next
 	End Function
+	
+	Function ClearWidgets()
+		ClearList(widgets)
+	End Function
+	
+	Function HideAllWidgets()
+		For Local w:TGuiBase = EachIn widgets
+			w.Hide()
+		Next
+	End Function
 
 	Function ProcessMessages()
 		Local oldTopElement : TGuiBase = topElement

@@ -42,7 +42,7 @@ Type TScoreBar
 	
 	Method Render()
 		SetAlpha(1)
-		font.Draw(points, 40, 25)
+		DrawText(points, 40, 25)
 		
 		If time < 0 Then time = 0
 		Local minutes:Int = time / 60
@@ -50,9 +50,9 @@ Type TScoreBar
 		Local tstr:String = minutes + ":"
 		If seconds < 10 Then tstr :+ "0"
 		tstr :+ seconds
-		font.Draw(tstr, GraphicsWidth() - 135 , 25)
+		DrawText(tstr, GraphicsWidth() - 135 , 25)
 		
-		smFont.Draw(jewlesCount + "/" + jewlesCountStart, GraphicsWidth() - 20 - smFont.getWidth(jewlesCount + "/" + jewlesCountStart), GraphicsHeight() - 65)
+		DrawText(jewlesCount + "/" + jewlesCountStart, GraphicsWidth() - 20 - textwidth(jewlesCount + "/" + jewlesCountStart), GraphicsHeight() - 65)
 		
 		For Local i:Int = 0 To 3
 			SetAlpha(0.3)

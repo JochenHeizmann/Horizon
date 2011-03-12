@@ -159,24 +159,27 @@ Type TSceneGame Extends TScene
 
 		buttons[BTN_RETRY] = TGuiWidgetTextButton.Create("incbin::../data/img/button_small.png", GraphicsWidth() / 2 - 110, GraphicsHeight() / 2 + 80, 220)
 		buttons[BTN_RETRY].SetText("Retry")
-		buttons[BTN_RETRY].SetFont(fontMedium)
+'		buttons[BTN_RETRY].SetFont(fontMedium)
 
 		buttons[BTN_LEAVE] = TGuiWidgetTextButton.Create("incbin::../data/img/button_small.png", GraphicsWidth() / 2 - 110, GraphicsHeight() / 2 + 150, 220)
 		buttons[BTN_LEAVE].SetText("Leave")
-		buttons[BTN_LEAVE].SetFont(fontMedium)
+'		buttons[BTN_LEAVE].SetFont(fontMedium)
 
 		buttons[BTN_OK] = TGuiWidgetTextButton.Create("incbin::../data/img/button_small.png", GraphicsWidth() / 2 - 110, GraphicsHeight() / 2 + 80, 220)
 		buttons[BTN_OK].SetText("Okay")
-		buttons[BTN_OK].SetFont(fontMedium)
+'		buttons[BTN_OK].SetFont(fontMedium)
 				
-		InitLevel(5)
+		InitLevel(0)
 	End Method	
 	
 	Method OnLeave()
 		TSoundPlayer.GetInstance().StopMusic()
+		buttons = NUll
+		TGuiSystem.ClearWidgets()
 	EndMethod
 	
 	Method Update()
+		TGuiSystem.ProcessMessages()
 		Select gamestate
 			Case STATE_GAME_RUNNING
 				ResetCollisions()
@@ -242,27 +245,20 @@ Type TSceneGame Extends TScene
 				If KeyDown(KEY_ESCAPE) Then gameState = STATE_GAME_OVER
 				
 			Case STATE_GET_READY
-				buttons[BTN_OK].Update()
 				If buttons[BTN_OK].IsClicked() Then gameState = STATE_GAME_RUNNING ; HideMouse()
 				
 			Case STATE_GAME_OVER								
-				buttons[BTN_RETRY].Update()
-				buttons[BTN_LEAVE].Update()
 				If buttons[BTN_RETRY].IsClicked() Then InitLevel(level)
 				If buttons[BTN_LEAVE].IsClicked() Then TApplication.GetInstance().SetNextScene("mainMenu")
 			
 			Case STATE_LEVEL_COMPLETE
-				buttons[BTN_OK].Update()
 				If buttons[BTN_OK].IsClicked() Then NextLevel()
 				
 			Case STATE_TIME_OUT
-				buttons[BTN_RETRY].Update()
-				buttons[BTN_LEAVE].Update()
 				If buttons[BTN_RETRY].IsClicked() Then InitLevel(level)
 				If buttons[BTN_LEAVE].IsClicked() Then TApplication.GetInstance().SetNextScene("mainMenu")
 				
 			Case STATE_GAME_COMPLETE
-				buttons[BTN_OK].Update()
 				If buttons[BTN_OK].IsClicked() Then TApplication.GetInstance().SetNextScene("mainMenu")			
 		End Select
 		
@@ -294,6 +290,8 @@ Type TSceneGame Extends TScene
 		
 		emitterEnemies.Render(tileMap.GetOffsetX(), tileMap.GetOffsetY())
 		
+		TGuiSystem.HideAllWidgets()
+		
 		Select gamestate
 			Case STATE_GAME_RUNNING
 				pointer.Render()
@@ -302,32 +300,31 @@ Type TSceneGame Extends TScene
 			Case STATE_GAME_OVER
 				ShowMouse()				
 				RenderTextScreen("YOU FAILED", "Try harder the next time...")
-				buttons[BTN_RETRY].Render()
-				buttons[BTN_LEAVE].Render()
+				buttons[BTN_RETRY].Show()
+				buttons[BTN_LEAVE].Show()
 				
 			Case STATE_TIME_OUT
 				ShowMouse()				
 				RenderTextScreen("OUT OF TIME", "Start playing, stop wasting time...")
-				buttons[BTN_RETRY].Render()
-				buttons[BTN_LEAVE].Render()
+				buttons[BTN_RETRY].Show()
+				buttons[BTN_LEAVE].Show()
 			
 			Case STATE_LEVEL_COMPLETE
 				ShowMouse()				
 				RenderTextScreen("LEVEL COMPLETE", "This was awesome!")				
-				buttons[BTN_OK].Render()
+				buttons[BTN_OK].Show()
 				
 			Case STATE_GAME_COMPLETE
 				ShowMouse()				
 				RenderTextScreen("GAME COMPLETE", "Congratulation! We hope you enjoyed this game.")				
-				buttons[BTN_OK].Render()
+				buttons[BTN_OK].Show()
 				
 			Case STATE_GET_READY
 				ShowMouse()				
 				RenderTextScreen("GET READY", "Collect all jewles to complete stage.")				
-				buttons[BTN_OK].Render()
-				
-
+				buttons[BTN_OK].Show()
 		End Select		
+		TGuiSystem.RenderAll()
 	End Method	
 	
 	Method RenderTextScreen(headline:String, subhead:String)
@@ -338,7 +335,7 @@ Type TSceneGame Extends TScene
 		SetAlpha(1)
 		SetColor(255,255,255)
 
-		fontBig.Draw(headline, GraphicsWidth() / 2, GraphicsHeight() / 2 - 30, True)
-		fontMedium.Draw(subhead, GraphicsWidth() / 2, GraphicsHeight() / 2 + 30, True)
+		DrawText(headline, GraphicsWidth() / 2 - TextWidth(headline) / 2, GraphicsHeight() / 2 - 30 - TextHeight(headline) / 2)
+		DrawText(subhead, GraphicsWidth() / 2 - TextWidth(subhead) / 2, GraphicsHeight() / 2 + 30 - TextHeight(subhead) / 2)
 	End Method
 End Type

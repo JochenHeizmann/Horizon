@@ -11,6 +11,7 @@ Framework BRL.GLMax2D
 Import "../../lib/Application.bmx"
 Import "../../lib/FaderBrightness.bmx"
 Import "../../lib/SystemDesktop.bmx"
+Import "../../lib/GuiSystem.bmx"
 
 ' Scene Imports
 Import "code/SceneSplashScreen.bmx"
@@ -26,12 +27,13 @@ Local debug:Int = 0
 If debug = 0 Then TApplication.InitGraphics(TSystemDesktop.GetWidth(), TSystemDesktop.GetHeight(), TSystemDesktop.GetDepth(), TSystemDesktop.GetHertz())
 
 TApplication.SetName("Aiolos")
+TGuiSystem.Init()
 
 Local myApp:TApplication = TApplication.GetInstance()
 myApp.AddFader(New TFaderBrightness)
-myApp.AddScene(New TSceneSplashScreen, "splashScreen")
-myApp.AddScene(New TSceneGame, "game")
+'myApp.AddScene(New TSceneSplashScreen, "splashScreen")
 myApp.AddScene(New TSceneMainMenu, "mainMenu")
+myApp.AddScene(New TSceneGame, "game")
 myApp.Run()
 
 End
