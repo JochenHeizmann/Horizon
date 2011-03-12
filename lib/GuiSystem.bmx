@@ -63,10 +63,17 @@ Type TGuiSystem
 				activeElement.OnActivate()
 			End If
 		
+			If (mouse.IsMouseHit(mouse.BUTTON_RIGHT))
+				topElement.OnRMouseHit()
+				selectedElement = topElement
+				activeElement = topElement
+				activeElement.OnActivate()
+			End If
+		
 			If (mouse.IsMouseDown(mouse.BUTTON_LEFT))
 				topElement.OnMouseDown()
 			End If
-
+			
 			If (mouse.IsMouseDown(mouse.BUTTON_RIGHT))
 				topElement.OnRMouseDown()
 			End If
@@ -76,6 +83,10 @@ Type TGuiSystem
 			End If
 		End If				
 		
+		If (mouse.IsMouseUp(mouse.BUTTON_RIGHT))
+			If topElement Then topElement.OnRMouseUp()
+		End If
+
 		If (selectedElement And mouse.IsMouseUp(mouse.BUTTON_LEFT))
 			selectedElement.OnMouseUp()
 			If (topElement = selectedElement) Then selectedElement.OnMouseClick()

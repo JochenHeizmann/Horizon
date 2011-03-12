@@ -6,7 +6,7 @@ Import BRL.PNGLoader
 
 Import "../../../lib/Scene.bmx"
 Import "../../../lib/Application.bmx"
-Import "../../../lib/GuiWidgetWindow.bmx"
+Import "../../../lib/GuiWidgetFrame.bmx"
 Import "../../../lib/GuiWidgetTextButton.bmx"
 Import "../../../lib/BitmapFont.bmx"
 

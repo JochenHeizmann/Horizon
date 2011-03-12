@@ -14,6 +14,8 @@ Type TGuiBase
 	Method OnMouseHit() Abstract
 	Method OnMouseDown() Abstract
 	Method OnRMouseDown() Abstract
+	Method OnRMouseUp() Abstract
+	Method OnRMouseHit() Abstract
 	Method OnMouseUp() Abstract
 	Method OnActivate() Abstract
 	Method OnMouseMove(dx : Int, dy : Int) Abstract
