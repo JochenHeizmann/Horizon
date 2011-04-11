@@ -44,17 +44,26 @@ Type TApplication
 	End Function
 	
 	Function InitGraphics(width:Int, height:Int, depth:Int = 0, hertz:Int = 0, flags:Int = 0)
+		DebugLog GetGraphicsDriver().ToString()
+		Rem
+		?Win
+		If (D3D9Max2DDriver())
+			DebugLog "Trying D3D9 Driver"
+			SetGraphicsDriver D3D9Max2DDriver()
+		Else If (D3D7Max2DDriver())
+			DebugLog "Trying D3D7 Driver"
+			SetGraphicsDriver D3D7Max2DDriver()
+		End If
+		?
+		
+		?MacOs
 		If (GLMax2DDriver())
 			DebugLog "Trying OpenGL Driver"
 			SetGraphicsDriver GLMax2DDriver()
-		Else If (D3D9Max2DDriver())
-			DebugLog "Trying D3D9 Driver"
-			SetGraphicsDriver  D3D9Max2DDriver())
-		Else If (D3D7Max2DDriver())
-			DebugLog "Trying D3D7 Driver"
-			SetGraphicsDriver  D3D7Max2DDriver())
 		End If
-
+		?
+		EndRem
+		
 		gfx = Graphics(width, height, depth, hertz, flags)
 		
 		If (Not gfx)
