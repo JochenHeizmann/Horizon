@@ -44,21 +44,18 @@ Type TApplication
 	End Function
 	
 	Function InitGraphics(width:Int, height:Int, depth:Int = 0, hertz:Int = 0, flags:Int = 0)
-		DebugLog "Trying OpenGL Driver"
-		SetGraphicsDriver GLMax2DDriver()
+		If (GLMax2DDriver())
+			DebugLog "Trying OpenGL Driver"
+			SetGraphicsDriver GLMax2DDriver()
+		Else If (D3D9Max2DDriver())
+			DebugLog "Trying D3D9 Driver"
+			SetGraphicsDriver  D3D9Max2DDriver())
+		Else If (D3D7Max2DDriver())
+			DebugLog "Trying D3D7 Driver"
+			SetGraphicsDriver  D3D7Max2DDriver())
+		End If
+
 		gfx = Graphics(width, height, depth, hertz, flags)
-		
-		If (Not gfx)
-			DebugLog "Driver failed... Trying D3D9 Driver"
-			SetGraphicsDriver D3D9Max2DDriver()
-			gfx = Graphics(width, height, depth, hertz, flags)
-		End If
-		
-		If (Not gfx)
-			DebugLog "Driver failed... Trying D3D7 Driver"
-			SetGraphicsDriver D3D7Max2DDriver()
-			gfx = Graphics(width, height, depth, hertz, flags)
-		End If
 		
 		If (Not gfx)
 			RuntimeError "No working GFX Driver found!"
