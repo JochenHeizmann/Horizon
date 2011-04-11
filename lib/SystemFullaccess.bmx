@@ -87,6 +87,7 @@ Type TSystemFullaccess
 	End Function
 	
 	Function SetPath(mypath:String)
+		DebugLog "SetPath: " + mypath
 		?Win32
 			Path = GetSpecialFolder(CSIDL_COMMON_APPDATA)+mypath
 		?
@@ -105,6 +106,7 @@ Type TSystemFullaccess
 	End Function
 
 	Function GetPath:String()
+		DebugLog "GET PATH...."
 		If (Path = "") Then SetPath(AppTitle + PATH_SEPERATOR)
 		Return Path
 	End Function	

@@ -8,6 +8,7 @@ Type TGuiSystem
 	Global topElement : TGuiBase
 	Global selectedElement : TGuiBase
 	Global activeElement : TGuiBase
+	Global modalElement : TGuiBase
 
 	Global widgets : TList
 	Global mouse : TInputControllerMouse
@@ -34,7 +35,14 @@ Type TGuiSystem
 			w.Hide()
 		Next
 	End Function
-
+	
+	Function RemoveWidget(w:TGuiBase)
+		For Local w:TGuiBase = EachIn w.childs
+			RemoveWidget(w)
+		Next
+		ListRemove(widgets, w)
+	End Function
+	
 	Function ProcessMessages()
 		Local oldTopElement : TGuiBase = topElement
 		If Not mouse.IsMouseDown(mouse.BUTTON_LEFT)

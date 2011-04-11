@@ -23,6 +23,10 @@ Type TGuiWidgetButton Extends TGuiWidget
 		rect.h = 20
 	End Method
 	
+	Method SetText(t:String)
+		text = t
+	End Method
+	
 	Method Update()
 		Super.Update()
 	End Method

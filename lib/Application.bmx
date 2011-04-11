@@ -44,8 +44,26 @@ Type TApplication
 	End Function
 	
 	Function InitGraphics(width:Int, height:Int, depth:Int = 0, hertz:Int = 0, flags:Int = 0)
+		DebugLog "Trying OpenGL Driver"
 		SetGraphicsDriver GLMax2DDriver()
 		gfx = Graphics(width, height, depth, hertz, flags)
+		
+		If (Not gfx)
+			DebugLog "Driver failed... Trying D3D9 Driver"
+			SetGraphicsDriver D3D9Max2DDriver()
+			gfx = Graphics(width, height, depth, hertz, flags)
+		End If
+		
+		If (Not gfx)
+			DebugLog "Driver failed... Trying D3D7 Driver"
+			SetGraphicsDriver D3D7Max2DDriver()
+			gfx = Graphics(width, height, depth, hertz, flags)
+		End If
+		
+		If (Not gfx)
+			RuntimeError "No working GFX Driver found!"
+		End If
+		
 		If (hertz <> 0)
 			skipTicks = Float(1000) / hertz
 		End If
@@ -197,6 +215,7 @@ Type TApplication
 		While (Not exitApp)
 			Update()
 			Render()
+			
 			nextGameTick :+ skipTicks
 			
 			?Debug
@@ -225,8 +244,7 @@ Type TApplication
 				
 				DrawText ("Frames: " + fps + "/s", 5, 2)
 				DrawText ("Mouse Pos: "+MouseX()+"/"+MouseY(),5, 14)
-				DrawText ("GCCollect: "+String(GCCollect()/1024)+"kb",5,26)
-				DrawText ("GCMemAlloced: "+String(GCMemAlloced()/1024)+"kb",5,38)
+				DrawText ("GCMemAlloced: "+String(GCMemAlloced()/1024)+"kb",5,26)
 				Local y:Int = 50
 				For Local s:String = EachIn debugMessages
 					DrawText (s,5,y)

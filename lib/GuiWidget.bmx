@@ -18,7 +18,6 @@ Type TGuiWidget Extends TGuiBase
 
 	Field id : Int
 	
-	Field childs : TList
 	Field parent : TGuiWidget
 
 	Field color : TColor

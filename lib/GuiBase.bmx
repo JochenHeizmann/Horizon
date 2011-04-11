@@ -5,6 +5,8 @@ Import "Rect.bmx"
 Type TGuiBase
 	Field rect : TRect
 	Field visible : Byte
+
+	Field childs : TList
 	
 	Method Render() Abstract
 	Method Update() Abstract
@@ -27,5 +29,5 @@ Type TGuiBase
 	
 	Method Show()
 		visible = True
-	End Method	
+	End Method		
 End Type
