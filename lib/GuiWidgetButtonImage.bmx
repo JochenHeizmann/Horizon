@@ -7,6 +7,7 @@ Type TGuiWidgetButtonImage Extends TGuiWidgetButton
 	
 	Method New()
 		If (img = Null) Then img = LoadAnimImage(TGuiSystem.SKIN_PATH + "requester/button.png", 43, 43, 0, 3)
+		If (img = Null) Then RuntimeError("Image not foudn: " + TGuiSystem.SKIN_PATH + "requester/button.png")
 		rect.h = ImageHeight(img)
 	End Method
 	
