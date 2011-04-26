@@ -5,6 +5,8 @@ Import "GuiWidget.bmx"
 Import "UtilImage.bmx"
 
 Type TGuiWidgetButton Extends TGuiWidget
+	Const PADDING:Int = 10
+	
 	Field text : String
 	Field font : TImageFont = Null
 	
@@ -25,6 +27,11 @@ Type TGuiWidgetButton Extends TGuiWidget
 	
 	Method SetText(t:String)
 		text = t
+	End Method
+	
+	Method AutoResize()
+		SetImageFont(font)
+		rect.w = PADDING * 2 + TextWidth(text)
 	End Method
 	
 	Method Update()

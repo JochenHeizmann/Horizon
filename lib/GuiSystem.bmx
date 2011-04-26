@@ -22,11 +22,15 @@ Type TGuiSystem
 	
 	Function RenderAll()
 		For Local w : TGuiBase = EachIn widgets
-			If w.visible Then w.Render()
+			If w.visible And w.autoRender Then w.Render()
 		Next
 	End Function
 	
 	Function ClearWidgets()
+		topElement = Null
+		selectedElement = Null
+		activeElement = Null
+		modalElement = Null
 		ClearList(widgets)
 	End Function
 	

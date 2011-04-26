@@ -163,6 +163,7 @@ Type TApplication
 	End Method
 	
 	Method SetNextScene(nextScene:String)
+		If (Self.nextScene And nextScene = Self.nextScene.name) Then Return
 		For Local scene:TScene = EachIn scenes
 			If (scene.name = nextScene)
 				SetState(SCENE_LEAVING)

@@ -5,6 +5,7 @@ Import "Rect.bmx"
 Type TGuiBase
 	Field rect : TRect
 	Field visible : Byte
+	Field autoRender : Byte
 
 	Field childs : TList
 	
@@ -23,11 +24,25 @@ Type TGuiBase
 	Method OnMouseMove(dx : Int, dy : Int) Abstract
 	Method OnMouseClick() Abstract
 
+	Method New()
+		autoRender = True
+	End Method
+
 	Method Hide()
 		visible = False
+		For Local t:TGuiBase = EachIn childs
+			t.Hide()
+		Next
 	End Method
 	
 	Method Show()
 		visible = True
+		For Local t:TGuiBase = EachIn childs
+			t.Show()
+		Next
 	End Method		
+	
+	Method SetAutoRender(aRender:Byte)
+		autoRender = aRender
+	End Method
 End Type
