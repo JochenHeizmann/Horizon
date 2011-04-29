@@ -90,7 +90,9 @@ Type TGuiWidget Extends TGuiBase
 	End Method
 
 	Method OnMouseOver()
-			If (widgetState = NOTHING) Then widgetState = HOVER
+		DebugLog "GuiWidget OnMouseOver()"
+		If (widgetState = NOTHING) Then widgetState = HOVER
+		DebugLog "End GuiWidget->OnMouseOver()"
 	End Method
 		
 	Method OnMouseMove(dx : Int, dy : Int)
@@ -114,6 +116,10 @@ Type TGuiWidget Extends TGuiBase
 	
 	Method OnRMouseUp()
 	End Method
-		
+	
+	Method Hide()
+		Super.Hide()
+		clicked = False
+	End Method
 End Type
 

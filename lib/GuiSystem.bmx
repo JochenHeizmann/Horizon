@@ -49,6 +49,8 @@ Type TGuiSystem
 	
 	Function ProcessMessages()
 		Local oldTopElement : TGuiBase = topElement
+		
+		DebugLog "1"
 		If Not mouse.IsMouseDown(mouse.BUTTON_LEFT)
 			topElement = Null
 		
@@ -61,18 +63,23 @@ Type TGuiSystem
 			Next
 		End If
 		
+		DebugLog "2"
 		For Local w : TGuiBase = EachIn widgets
 			If w.visible
 				w.Update()
 			End If
 		Next
 		
+		DebugLog "3"
 		' send onMouseOver / onMouseOut
 		If (topElement <> oldTopElement)
+			DebugLog "topElement.OnMouseOver()"
 			If (topElement) Then topElement.OnMouseOver()
+			DebugLog "oldtopElement.OnMouseOut()"
 			If (oldTopElement) Then oldTopElement.OnMouseOut()
 		End If
-		
+		DebugLog "end 3"
+
 		If (mouse.IsMouseHit(mouse.BUTTON_LEFT))
 			activeElement = Null
 		End If
@@ -104,7 +111,7 @@ Type TGuiSystem
 				topElement.OnMouseMove(mouse.GetDX(), mouse.GetDY())
 			End If
 		End If				
-		
+
 		If (mouse.IsMouseUp(mouse.BUTTON_RIGHT))
 			If topElement Then topElement.OnRMouseUp()
 		End If

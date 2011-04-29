@@ -73,7 +73,8 @@ Type TInputControllerMouse
 	End Method	
 	
 	Method RefreshMouseWheel()
-
+		mouseWheel = MouseZ() - oldMouseWheel
+		oldMouseWheel = MouseZ()
 	End Method
 	
 	Method IsMouseDown:Int(btn:Int)
@@ -89,8 +90,6 @@ Type TInputControllerMouse
 	End Method
 	
 	Method GetMouseWheel:Int()
-		Local ret:Int = MouseZ() - oldMouseWheel
-		oldMouseWheel = MouseZ()
-		Return ret
+		Return mouseWheel
 	End Method
 End Type

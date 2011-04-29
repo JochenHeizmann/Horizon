@@ -28,6 +28,12 @@ Type TApplication
 	Field vSync:Int
 	Field state:Int
 	
+	Field width:Int
+	Field height:Int
+	Field depth:Int
+	Field hertz:Int
+	Field flags:Int
+	
 	?Debug
 		Field debugMessages:TList
 	?
@@ -44,26 +50,6 @@ Type TApplication
 	End Function
 	
 	Function InitGraphics(width:Int, height:Int, depth:Int = 0, hertz:Int = 0, flags:Int = 0)
-		DebugLog GetGraphicsDriver().ToString()
-		Rem
-		?Win
-		If (D3D9Max2DDriver())
-			DebugLog "Trying D3D9 Driver"
-			SetGraphicsDriver D3D9Max2DDriver()
-		Else If (D3D7Max2DDriver())
-			DebugLog "Trying D3D7 Driver"
-			SetGraphicsDriver D3D7Max2DDriver()
-		End If
-		?
-		
-		?MacOs
-		If (GLMax2DDriver())
-			DebugLog "Trying OpenGL Driver"
-			SetGraphicsDriver GLMax2DDriver()
-		End If
-		?
-		EndRem
-		
 		gfx = Graphics(width, height, depth, hertz, flags)
 		
 		If (Not gfx)
@@ -74,7 +60,24 @@ Type TApplication
 			skipTicks = Float(1000) / hertz
 		End If
 		SetBlend(ALPHABLEND)
+		
+		GetInstance().width = width
+		GetInstance().height = height
+		GetInstance().depth = depth
+		GetInstance().hertz = hertz
+		GetInstance().flags = flags
 	End Function
+	
+	Method ToggleFullscreen()
+		EndGraphics()
+		GCCollect()
+		If (depth = 0)
+			depth = 32
+		Else
+			depth = 0
+		End If
+		Graphics(width, height, depth, hertz, flags)
+	End Method
 	
 	Function SetName(name:String)
 		AppTitle = name

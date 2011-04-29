@@ -27,7 +27,6 @@ Type TGuiWidgetSliderHorizontal Extends TGuiWidget
 	End Method
 	
 	Method Update()
-		Print GetPositionInPercent()
 		If (startSlide)
 			sliderPosX :- TInputControllerMouse.GetInstance().GetDX()
 			If (sliderPosX < 0) Then sliderPosX = 0
@@ -43,8 +42,8 @@ Type TGuiWidgetSliderHorizontal Extends TGuiWidget
 			SetColor(255,0,0)
 			DrawRect(rect.x, rect.y, rect.w, rect.h)
 			SetColor(0,255,0)
-		
 			DrawRect(rect.x + sliderPosX - 2, rect.y - 2, 4, rect.h + 4)		
+			SetColor(255,255,255)
 		End If
 	End Method	
 	
@@ -68,4 +67,8 @@ Type TGuiWidgetSliderHorizontal Extends TGuiWidget
 	Method GetPositionInPixel:Int()
 		Return sliderPosX
 	End Method	
+	
+	Method SetPositionInPercent(p:Float)
+		sliderPosX = rect.w * p / 100.0
+	End Method
 End Type

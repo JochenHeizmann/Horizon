@@ -2,17 +2,21 @@
 SuperStrict
 
 Import "GuiWidgetFrame.bmx"
+Import "Color.bmx"
 
 Type TGuiWidgetTextbox Extends TGuiWidgetFrame
 
-	Const PADDING:Int = 2
-	
+	Field PADDING:Int = 2
+
+	Field font:TImageFont
+		
 	Field multiline:Byte = False
 	Field text:String
 	Field maxLen : Int
 	Field cPos : Int
 	Field cursorJump:Byte
 	Field allowedChars:String
+	Field textColor:TColor
 	
 	Function CreateTextbox : TGuiWidgetTextbox(x:Int, y:Int, w:Int, h:Int)
 		Local t:TGuiWidgetTextbox = New TGuiWidgetTextBox
@@ -36,6 +40,7 @@ Type TGuiWidgetTextbox Extends TGuiWidgetFrame
 		bottomBorder = LoadImage(TGuiSystem.SKIN_PATH + "window/bottomborder.png")
 		maxLen = 10000
 		allowedChars = ""
+		textColor = TColor.Create(0,0,0)
 	End Method
 	
 	Method Render()
@@ -52,8 +57,8 @@ Type TGuiWidgetTextbox Extends TGuiWidgetFrame
 		DrawRect x,y, GetInnerWidth(), GetInnerHeight()
 		x :+ PADDING
 		y :+ PADDING
-		SetColor(0,0,0)
-		SetImageFont(Null)
+		SetColor(textColor.r, textColor.g, textColor.b)
+		SetImageFont(font)
 		For Local pos:Int = 0 To text.length
 			Local char:String = Mid(text, pos, 1)
 			
@@ -97,6 +102,10 @@ Type TGuiWidgetTextbox Extends TGuiWidgetFrame
 		SetColor(255,255,255)
 		SetViewport(0,0,GraphicsWidth(), GraphicsHeight())
 		Super.Render()	
+	End Method
+	
+	Method CursorToEnd()
+		cPos = text.length
 	End Method
 	
 	Method DrawTopBar()
