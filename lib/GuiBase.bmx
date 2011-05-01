@@ -49,5 +49,8 @@ Type TGuiBase
 	
 	Method SetAutoRender(aRender:Byte)
 		autoRender = aRender
+		For Local t:TGuiBase = EachIn childs
+			t.SetAutoRender(aRender)
+		Next
 	End Method
 End Type
