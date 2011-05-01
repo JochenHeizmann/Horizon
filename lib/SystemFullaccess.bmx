@@ -5,11 +5,11 @@ SuperStrict
 	Import "external/SystemFullaccess.cpp"
 	Import "-ladvapi32"
 
-	Const PATH_SEPERATOR:String = "\"
+	Const PATH_SEPERATOR:String = "\"
 	
 	Extern "Win32"
-	Function SHGetSpecialFolderLocation(hwndOwner, nFolder, pIdl:Byte Ptr)
-	Function SHGetPathFromIDList(pidList, lpBuffer:Byte Ptr)
+	Function SHGetSpecialFolderLocation:Int(hwndOwner:Int, nFolder:Int, pIdl:Byte Ptr)
+	Function SHGetPathFromIDList:Int(pidList:Int, lpBuffer:Byte Ptr)
 	
 	Function CreateFile(lpString:Byte Ptr,dwDesiredAccess:Int,dwShareMode:Int,..
 		lpSecurityAttributes:Byte Ptr,dwCreationDisposition:Int,dwFlagsAndAttributes:Int,hWnd:Int)
@@ -19,42 +19,42 @@ SuperStrict
 		Function GiveDirectoryUserFullAccess:Int(lpPath$z)
 	EndExtern
 	
-	Const CSIDL_DESKTOP = $0
-	Const CSIDL_INTERNET = $1
-	Const CSIDL_PROGRAMS = $2
-	Const CSIDL_CONTROLS = $3
-	Const CSIDL_PRINTERS = $4
-	Const CSIDL_PERSONAL = $5
-	Const CSIDL_FAVORITES = $6
-	Const CSIDL_STARTUP = $7
-	Const CSIDL_RECENT = $8
-	Const CSIDL_SENDTO = $9
-	Const CSIDL_BITBUCKET = $A
-	Const CSIDL_STARTMENU = $B
-	Const CSIDL_DESKTOPDIRECTORY = $10
-	Const CSIDL_DRIVES = $11
-	Const CSIDL_NETWORK = $12
-	Const CSIDL_NETHOOD = $13
-	Const CSIDL_FONTS = $14
-	Const CSIDL_TEMPLATES = $15
-	Const CSIDL_COMMON_STARTMENU = $16
-	Const CSIDL_COMMON_PROGRAMS = $17
-	Const CSIDL_COMMON_STARTUP = $18
-	Const CSIDL_COMMON_DESKTOPDIRECTORY = $19
-	Const CSIDL_APPDATA = $1A
-	Const CSIDL_PRINTHOOD = $1B
-	Const CSIDL_LOCAL_APPDATA = $1C
-	Const CSIDL_ALTSTARTUP = $1D
-	Const CSIDL_COMMON_ALTSTARTUP = $1E
-	Const CSIDL_COMMON_FAVORITES = $1F
-	Const CSIDL_INTERNET_CACHE = $20
-	Const CSIDL_COOKIES = $21
-	Const CSIDL_HISTORY = $22
-	Const CSIDL_COMMON_APPDATA = $23
+	Const CSIDL_DESKTOP:Int = $0
+	Const CSIDL_INTERNET:Int = $1
+	Const CSIDL_PROGRAMS:Int = $2
+	Const CSIDL_CONTROLS:Int = $3
+	Const CSIDL_PRINTERS:Int = $4
+	Const CSIDL_PERSONAL:Int = $5
+	Const CSIDL_FAVORITES:Int = $6
+	Const CSIDL_STARTUP:Int = $7
+	Const CSIDL_RECENT:Int = $8
+	Const CSIDL_SENDTO:Int = $9
+	Const CSIDL_BITBUCKET:Int = $A
+	Const CSIDL_STARTMENU:Int = $B
+	Const CSIDL_DESKTOPDIRECTORY:Int = $10
+	Const CSIDL_DRIVES:Int = $11
+	Const CSIDL_NETWORK:Int = $12
+	Const CSIDL_NETHOOD:Int = $13
+	Const CSIDL_FONTS:Int = $14
+	Const CSIDL_TEMPLATES:Int = $15
+	Const CSIDL_COMMON_STARTMENU:Int = $16
+	Const CSIDL_COMMON_PROGRAMS:Int = $17
+	Const CSIDL_COMMON_STARTUP:Int = $18
+	Const CSIDL_COMMON_DESKTOPDIRECTORY:Int = $19
+	Const CSIDL_APPDATA:Int = $1A
+	Const CSIDL_PRINTHOOD:Int = $1B
+	Const CSIDL_LOCAL_APPDATA:Int = $1C
+	Const CSIDL_ALTSTARTUP:Int = $1D
+	Const CSIDL_COMMON_ALTSTARTUP:Int = $1E
+	Const CSIDL_COMMON_FAVORITES:Int = $1F
+	Const CSIDL_INTERNET_CACHE:Int = $20
+	Const CSIDL_COOKIES:Int = $21
+	Const CSIDL_HISTORY:Int = $22
+	Const CSIDL_COMMON_APPDATA:Int = $23
 ?
 
 ?MacOs
-	Const PATH_SEPERATOR:String = "/"
+	Const PATH_SEPERATOR:String = "/"
 	Const kUserDomain:Int=-32763
 	Const kVolumeRootFolderType:Int=Asc("r") Shl 24 | Asc("o") Shl 16 | Asc( "o") Shl 8 | Asc("t")
 	
