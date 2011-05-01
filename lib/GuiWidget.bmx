@@ -23,15 +23,16 @@ Type TGuiWidget Extends TGuiBase
 	Field color : TColor
 	
 	Field clicked : Byte
-
-	Method ToFront()
-		ListRemove(TGuiSystem.widgets, Self)
-		ListAddLast(TGuiSystem.widgets, Self)
-		For Local c : TGuiWidget = EachIn childs
-			c.ToFront()
-		Next
-	End Method	
 	
+	Method IsChildOf:Byte(element:TGuiBase)
+		If (Not element) Then Return True
+		If (parent) 
+			If (parent = element) Then Return True
+			Return parent.IsChildOf(element)
+		End If
+		Return False		
+	End Method
+
 	Method New()
 		idCounter :+ 1
 		id = idCounter
@@ -41,6 +42,14 @@ Type TGuiWidget Extends TGuiBase
 		color = TColor.Create(255, 255, 255)
 		ListAddLast(TGuiSystem.widgets, Self)
 	End Method
+	
+	Method ToFront()
+		ListRemove(TGuiSystem.widgets, Self)
+		ListAddLast(TGuiSystem.widgets, Self)
+		For Local c : TGuiBase = EachIn childs
+			c.ToFront()
+		Next
+	End Method	
 	
 	Method OnActivate()
 		ToFront()
@@ -59,6 +68,7 @@ Type TGuiWidget Extends TGuiBase
 	
 	Method RemoveChild(w : TGuiWidget)
 		ListRemove(childs, w)
+		w.parent = Null
 	End Method
 
 	Method Update()

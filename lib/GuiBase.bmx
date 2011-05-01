@@ -6,6 +6,7 @@ Type TGuiBase
 	Field rect : TRect
 	Field visible : Byte
 	Field autoRender : Byte
+	Field isModal:Byte
 
 	Field childs : TList
 	
@@ -23,10 +24,14 @@ Type TGuiBase
 	Method OnActivate() Abstract
 	Method OnMouseMove(dx : Int, dy : Int) Abstract
 	Method OnMouseClick() Abstract
+	Method ToFront() Abstract
 
 	Method New()
 		autoRender = True
+		isModal = False
 	End Method
+	
+	Method IsChildOf:Byte(element:TGuiBase) Abstract
 
 	Method Hide()
 		visible = False

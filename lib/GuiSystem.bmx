@@ -49,36 +49,36 @@ Type TGuiSystem
 	
 	Function ProcessMessages()
 		Local oldTopElement : TGuiBase = topElement
+		Local modalElement : TGuiBase
+	
+		For Local w : TGuiBase = EachIn widgets
+			If w.visible And w.isModal
+				modalElement = w
+			End If
+		Next
 		
-		DebugLog "1"
 		If Not mouse.IsMouseDown(mouse.BUTTON_LEFT)
 			topElement = Null
-		
 			For Local w : TGuiBase = EachIn widgets
-				If w.visible
+				If w.visible And w.IsChildOf(modalElement)
 					If (w.rect.IsInRect(mouse.GetX(), mouse.GetY()))
 						topElement = w
 					End If
 				End If
 			Next
 		End If
-		
-		DebugLog "2"
+
 		For Local w : TGuiBase = EachIn widgets
-			If w.visible
+			If w.visible 'And w.IsChildOf(modalElement)
 				w.Update()
 			End If
 		Next
 		
-		DebugLog "3"
 		' send onMouseOver / onMouseOut
 		If (topElement <> oldTopElement)
-			DebugLog "topElement.OnMouseOver()"
 			If (topElement) Then topElement.OnMouseOver()
-			DebugLog "oldtopElement.OnMouseOut()"
 			If (oldTopElement) Then oldTopElement.OnMouseOut()
 		End If
-		DebugLog "end 3"
 
 		If (mouse.IsMouseHit(mouse.BUTTON_LEFT))
 			activeElement = Null
