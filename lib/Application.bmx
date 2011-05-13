@@ -7,6 +7,7 @@ Import BRL.Graphics
 Import "Scene.bmx"
 Import "Fader.bmx"
 Import "InputControllerMouse.bmx"
+Import "SystemDesktop.bmx"
 
 Type TApplication
 	Const VSYNC_OFF:Int = 0
@@ -49,16 +50,29 @@ Type TApplication
 		Return Self.application
 	End Function
 	
-	Function InitGraphics(width:Int, height:Int, depth:Int = 0, hertz:Int = 0, flags:Int = 0)
-		gfx = Graphics(width, height, depth, hertz, flags)
+	Function InitGraphics(width:Int, Height:Int, depth:Int = 0, hertz:Int = 0, Flags:Int = 0)
+		?Win32
+			SetGraphicsDriver D3D7Max2DDriver()
+'			SetGraphicsDriver D3D9Max2DDriver()
+		?
+		?Not Win32
+			SetGraphicsDriver GLMax2DDriver()
+		?
+			
+		If (depth = 0)
+			gfx = Graphics(width, Height, depth, hertz, Flags)
+		Else
+			gfx = Graphics(TSystemDesktop.GetWidth(), TSystemDesktop.GetHeight(), TSystemDesktop.GetDepth(), hertz, flags)
+			SetVirtualResolution(width, height)
+			SetViewport(0,0,GraphicsWidth(), GraphicsHeight())
+		End If
+		
+		Print gfx.Driver().toString()
 		
 		If (Not gfx)
 			RuntimeError "No working GFX Driver found!"
 		End If
 		
-		If (hertz <> 0)
-			skipTicks = Float(1000) / hertz
-		End If
 		SetBlend(ALPHABLEND)
 		
 		GetInstance().width = width
@@ -69,6 +83,8 @@ Type TApplication
 	End Function
 	
 	Method ToggleFullscreen()
+		Local vw:Float = VirtualResolutionWidth()
+		Local vh:Float = VirtualResolutionHeight()
 		EndGraphics()
 		GCCollect()
 		If (depth = 0)
@@ -76,7 +92,21 @@ Type TApplication
 		Else
 			depth = 0
 		End If
-		Graphics(width, height, depth, hertz, flags)
+		If (depth = 0)
+			gfx = Graphics(vw, vh, 0, hertz, Flags)
+		Else
+			gfx = Graphics(TSystemDesktop.GetWidth(), TSystemDesktop.GetHeight(), depth, hertz, Flags)
+			SetVirtualResolution(vw,vh)
+			SetViewport(0,0,GraphicsWidth(), GraphicsHeight())
+		End If
+		SetBlend(ALPHABLEND)
+	End Method
+	
+	Method NavigateToURL(url:String)
+		If (depth <> 0)
+			ToggleFullscreen()
+		End If
+		OpenURL(url)
 	End Method
 	
 	Function SetName(name:String)
@@ -202,6 +232,7 @@ Type TApplication
 		For Local fader:TFader = EachIn faders
 			fader.FadeIn()
 		Next
+		skipTicks = Float(1000) / Float(hertz)
 	End Method
 	
 	Method Trace(s:String)
@@ -212,9 +243,10 @@ Type TApplication
 		
 	Method Run()	
 		InitGameloop()
-		Local nextGameTick:Float = MilliSecs()
+		Local nextGameTick:Double = MilliSecs()
 		Local sleepTime:Int = 0
 		Local loops:Int = 0
+		Local allocedMemory:Int = 0
 
 		?Debug
 			Local fpsTimer:Float = MilliSecs() + 1000
@@ -222,11 +254,11 @@ Type TApplication
 			Local fps:Int = 0			
 		?
 		
+		skipTicks = 1000.0 / 60.0
+		
 		While (Not exitApp)
 			Update()
 			Render()
-			
-			nextGameTick :+ skipTicks
 			
 			?Debug
 				SetImageFont(Null)
@@ -234,7 +266,7 @@ Type TApplication
 				If (KeyDown(KEY_TAB))
 					SetAlpha(0.8)
 					SetColor(0,0,0)
-					DrawRect(0,0,GraphicsWidth(), GraphicsHeight())
+					DrawRect(0,0,VirtualResolutionWidth(), VirtualResolutionHeight())
 					SetColor(255,255,255)
 					SetAlpha(1)
 				Else
@@ -250,11 +282,12 @@ Type TApplication
 					fps = fpsFrame
 					fpsFrame = 1
 					fpsTimer = MilliSecs() + 1000
+					allocedMemory = GCMemAlloced()/1024
 				End If
 				
 				DrawText ("Frames: " + fps + "/s", 5, 2)
-				DrawText ("Mouse Pos: "+MouseX()+"/"+MouseY(),5, 14)
-				DrawText ("GCMemAlloced: "+String(GCMemAlloced()/1024)+"kb",5,26)
+				DrawText ("Mouse Pos: " + VirtualMouseX() + "/" + VirtualMouseY(), 5, 14)
+				DrawText ("GCMemAlloced: "+String(allocedMemory)+"kb",5,26)
 				Local y:Int = 50
 				For Local s:String = EachIn debugMessages
 					DrawText (s,5,y)
@@ -262,12 +295,14 @@ Type TApplication
 				Next
 				SetAlpha(alpha)
 			?
+
 			
 			If AppTerminate() Then Leave()
 			Flip(vSync)
 			
+			nextGameTick :+ skipTicks			
 			sleepTime = nextGameTick - MilliSecs()
-			If (sleepTime > 0)
+			If (sleepTime >= 0)
 				Delay(sleepTime)
 			End If
 		Wend
@@ -278,5 +313,5 @@ Type TApplication
 	Method CleanUp()
 		scenes = Null
 		faders = Null
-	End Method		
+	End Method
 End Type

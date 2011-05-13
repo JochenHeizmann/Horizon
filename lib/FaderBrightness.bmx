@@ -1,4 +1,4 @@
-
+﻿
 SuperStrict
 
 Import BRL.Max2D
@@ -18,7 +18,7 @@ Type TFaderBrightness Extends TFader
 		SetColor(0,0,0)
 		SetRotation(0)
 		
-		DrawRect(0,0, GraphicsWidth(), GraphicsHeight())
+		DrawRect(0,0, VirtualResolutionWidth(), VirtualResolutionHeight())
 		
 		SetColor(r,g,b)
 		SetAlpha(alpha)

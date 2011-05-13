@@ -1,4 +1,4 @@
-
+﻿
 SuperStrict
 
 Type TInputControllerMouse
@@ -15,9 +15,9 @@ Type TInputControllerMouse
 	Field buttonDown:Int[NUM_BUTTONS]
 	Field mouseWheel:Int, oldMouseWheel:Int 
 	
-	Field mx : Int, my : Int
-	Field oldMx : Int, oldMy : Int
-	Field dx : Int, dy : Int
+	Field mx:Float, my:Float
+	Field oldMx:Float, oldMy:Float
+	Field dx:Float, dy:Float
 	
 	Function GetInstance:TInputControllerMouse()
 		If Not Self.instance
@@ -36,25 +36,25 @@ Type TInputControllerMouse
 	Method RefreshMouseCoords()
 		oldMx = mx
 		oldMy = my
-		mx = MouseX()
-		my = MouseY()
+		mx = VirtualMouseX()
+		my = VirtualMouseY()
 		dx = oldMx - mx
 		dy = oldMy - my
 	End Method
 	
-	Method GetX : Int()
+	Method GetX:Float()
 		Return mx
 	End Method
 	
-	Method GetY : Int()
+	Method GetY:Float()
 		Return my
 	End Method
 	
-	Method GetDX : Int()
+	Method GetDX:Float()
 		Return dx
 	End Method
 	
-	Method GetDY : Int()
+	Method GetDY:Float()
 		Return dy
 	End Method
 	

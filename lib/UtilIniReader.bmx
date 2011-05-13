@@ -19,7 +19,7 @@ Type TUtilIniReader
 		
 		If (section2)
 			For key2 = EachIn section2.keys
-				If key2.name.ToLower() = key Then Return key2.value
+				If key2.name.ToLower() = key.ToLower() Then Return key2.value
 			Next
 		End If
 		

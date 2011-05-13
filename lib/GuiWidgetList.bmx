@@ -1,4 +1,4 @@
-
+﻿
 SuperStrict
 Import "UtilImage.bmx"
 Import "GuiWidgetImageButton.bmx"
@@ -100,7 +100,7 @@ Type TGuiWidgetList Extends TGuiWidget
 			y :+ entryHeight
 			key :+ 1
 		Next
-		SetViewport(0, 0, GraphicsWidth(), GraphicsHeight())
+		SetViewport(0, 0, VirtualResolutionWidth(), VirtualResolutionHeight())
 	End Method
 	
 	Method GetDisplayHeight:Float()

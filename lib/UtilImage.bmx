@@ -1,4 +1,4 @@
-
+﻿
 SuperStrict
 
 Import BRL.FileSystem
@@ -16,7 +16,6 @@ Type TUtilImage
 	End Function
 
 	Function DrawRepeated(img:TImage, x:Int, y:Int, w:Int, h:Int, frame:Int = 0)
-	
 		If x < 0 Then w :+ x ; x = 0
 		If y < 0 Then h :+ y ; y = 0
 	
@@ -40,9 +39,9 @@ Type TUtilImage
 		
 		If x < 0 Then viewportW :+ x
 		If x < 0 Then viewportH :+ y
-
-		SetViewport(viewportX,viewportY,viewportW,viewportH)
-		TileImage img, x, y, frame
+		
+		SetViewport(viewportX, viewportY, viewportW, viewportH)
+		TileImage IMG, X, Y, frame
 		SetViewport(oldViewportX, oldViewportY, oldViewportW, oldViewportH)
 	End Function
 End Type

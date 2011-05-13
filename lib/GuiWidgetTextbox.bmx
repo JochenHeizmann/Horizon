@@ -1,4 +1,4 @@
-
+﻿
 SuperStrict
 
 Import "GuiWidgetFrame.bmx"
@@ -100,7 +100,7 @@ Type TGuiWidgetTextbox Extends TGuiWidgetFrame
 			If (pos >= maxLen) Then Exit
 		Next
 		SetColor(255,255,255)
-		SetViewport(0,0,GraphicsWidth(), GraphicsHeight())
+		SetViewport(0,0,VirtualResolutionWidth(), VirtualResolutionHeight())
 		Super.Render()	
 	End Method
 	

@@ -1,9 +1,10 @@
-SuperStrict
+﻿SuperStrict
 
 Import "GuiWidgetButton.bmx"
 
 Type TGuiWidgetButtonImage Extends TGuiWidgetButton
 	Global img:TImage
+	Field precalcedImage:TImage
 	
 	Method New()
 		If (img = Null) Then img = LoadAnimImage(TGuiSystem.SKIN_PATH + "requester/button.png", 43, 43, 0, 3)
@@ -23,7 +24,6 @@ Type TGuiWidgetButtonImage Extends TGuiWidgetButton
 			Default
 				SetColor(200,200,200)
 		End Select
-		
 
 		DrawImage (img, rect.x, rect.y, 0)
 		TUtilImage.DrawRepeated(img, rect.x + ImageWidth(img), rect.y, rect.w - ImageWidth(img) * 2, ImageHeight(img), 1)
