@@ -56,8 +56,6 @@ Type TGuiWidget Extends TGuiBase
 	End Method
 
 	Method Render()
-		color.Set()
-		DrawRect(rect.GetX(), rect.GetY(), rect.GetW(), rect.GetH())
 	End Method
 	
 	Method AddChild(w : TGuiWidget)

@@ -103,10 +103,14 @@ Type TApplication
 	End Method
 	
 	Method NavigateToURL(url:String)
+		SwitchToWindowedMode()
+		OpenURL(url)
+	End Method
+	
+	Method SwitchToWindowedMode()
 		If (depth <> 0)
 			ToggleFullscreen()
 		End If
-		OpenURL(url)
 	End Method
 	
 	Function SetName(name:String)
