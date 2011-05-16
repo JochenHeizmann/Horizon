@@ -37,6 +37,11 @@ Type TProfile
 			currentNode = Null
 		End If
 	End Function
+	
+	Function Clear()
+		If (Not ENABLED) Then Return
+		ClearMap(samples)
+	End Function
 		
 	Function GetOutput:TList()
 		If (Not ENABLED) Then Return CreateList()
