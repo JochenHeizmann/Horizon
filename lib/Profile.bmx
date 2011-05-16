@@ -1,10 +1,14 @@
 SuperStrict 
 
+Import "ProfileNode.bmx"
+
 Type TProfile
+	Global ENABLED:Byte = False
 	Global samples:TMap = CreateMap()
 	Global currentNode:TProfileNode
 
 	Function Start(name:String)
+		If (Not ENABLED) Then Return
 		Local p:TProfileNode = TProfileNode(MapValueForKey(samples, name))
 		If (p)
 			p.Init()			
@@ -25,6 +29,7 @@ Type TProfile
 	End Function
 		
 	Function Done()
+		If (Not ENABLED) Then Return
 		currentNode.Stop()
 		If (currentNode.parent)
 			currentNode = currentNode.parent
@@ -34,6 +39,7 @@ Type TProfile
 	End Function
 		
 	Function GetOutput:TList()
+		If (Not ENABLED) Then Return CreateList()
 		Local strs:TList = CreateList()
 		strs.AddLast("Count | Ave | Min | Max | CPU | Name")
 		
