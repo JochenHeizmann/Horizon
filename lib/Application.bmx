@@ -164,7 +164,7 @@ Type TApplication
 				fader.Render()
 			Next
 		End If
-		If (currentScene) Then TProfile.Stop()
+		If (currentScene) Then TProfile.Done()
 	End Method
 
 	Method Update()
@@ -200,7 +200,7 @@ Type TApplication
 				End If				
 			End If
 		End If
-		TProfile.Stop()
+		TProfile.Done()
 	End Method
 	
 	Method SetNextScene(nextScene:String)
@@ -322,7 +322,7 @@ Type TApplication
 		CleanUp()
 	End Method	
 	
-	Method RenderProfilInfo()
+	Method RenderProfileInfo()
 		SetAlpha(0.5)
 		SetColor(0,0,0)
 		DrawRect(0,0, GraphicsWidth(), GraphicsHeight())
