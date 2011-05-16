@@ -8,6 +8,7 @@ Import "Scene.bmx"
 Import "Fader.bmx"
 Import "InputControllerMouse.bmx"
 Import "SystemDesktop.bmx"
+Import "Profile.bmx"
 
 Type TApplication
 	Const VSYNC_OFF:Int = 0
@@ -157,15 +158,17 @@ Type TApplication
 	End Method
 	
 	Method Render()
-		If (currentScene) Then currentScene.Render()
+		If (currentScene) Then TProfile.Start("Application.Render() - " + currentScene.name) ; currentScene.Render()
 		If (state <> SCENE_ACTIVE)
 			For Local fader:TFader = EachIn faders
 				fader.Render()
 			Next
 		End If
+		If (currentScene) Then TProfile.Stop()
 	End Method
 
 	Method Update()
+		TProfile.Start("Application.Update() - " + currentScene.name)		
 		?Debug
 			ClearList(debugMessages)
 		?
@@ -197,6 +200,7 @@ Type TApplication
 				End If				
 			End If
 		End If
+		TProfile.Stop()
 	End Method
 	
 	Method SetNextScene(nextScene:String)
@@ -299,6 +303,10 @@ Type TApplication
 				Next
 				SetAlpha(alpha)
 			?
+			
+			If (TProfile.ENABLED And KeyDown(KEY_F5))
+				RenderProfileInfo()
+			End If
 
 			
 			If AppTerminate() Then Leave()
@@ -313,6 +321,26 @@ Type TApplication
 		
 		CleanUp()
 	End Method	
+	
+	Method RenderProfilInfo()
+		SetAlpha(0.5)
+		SetColor(0,0,0)
+		DrawRect(0,0, GraphicsWidth(), GraphicsHeight())
+		SetColor(255,255,255)
+		SetAlpha(1)
+		Local x:Int = 10
+		Local y:Int = 10
+		Local tx:Int = x
+		SetImageFont(Null)
+		For Local s:String = EachIn TProfile.GetOutput()
+			tx = x
+			For Local txt:String = EachIn s.Split(" | ")
+				DrawText(txt, tx, y)
+				tx :+ 80
+			Next
+			y :+ TextHeight(s)
+		Next
+	End Method
 	
 	Method CleanUp()
 		scenes = Null
