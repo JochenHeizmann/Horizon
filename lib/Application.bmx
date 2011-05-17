@@ -158,7 +158,7 @@ Type TApplication
 	End Method
 	
 	Method Render()
-		If (currentScene) Then TProfile.Start("Application.Render() - " + currentScene.name) ; currentScene.Render()
+		If (currentScene) Then TProfile.Start("Application.Render() [" + currentScene.name + "]") ; currentScene.Render()
 		If (state <> SCENE_ACTIVE)
 			For Local fader:TFader = EachIn faders
 				fader.Render()
@@ -168,7 +168,7 @@ Type TApplication
 	End Method
 
 	Method Update()
-		TProfile.Start("Application.Update() - " + currentScene.name)		
+		TProfile.Start("Application.Update() - [" + currentScene.name + "]")		
 		?Debug
 			ClearList(debugMessages)
 		?
@@ -191,7 +191,8 @@ Type TApplication
 					currentScene = nextScene					
 					If (Not currentScene)
 						exitApp = True
-					Else					
+					Else			
+						TProfile.Clear()		
 						currentScene.OnEnter()
 						For Local fader:TFader = EachIn faders
 							fader.FadeIn()
