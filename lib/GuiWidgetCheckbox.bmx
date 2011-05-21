@@ -1,4 +1,4 @@
-
+﻿
 SuperStrict
 
 Import "GuiWidget.bmx"
@@ -23,6 +23,7 @@ Type TGuiWidgetCheckbox Extends TGuiWidget
 	End Method
 	
 	Method Update()
+		Super.Update()
 	End Method
 	
 	Method Render()
