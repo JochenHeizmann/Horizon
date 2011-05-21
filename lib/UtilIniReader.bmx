@@ -1,4 +1,4 @@
-SuperStrict
+﻿SuperStrict
 
 Import BRL.FileSystem
 Import BRL.LinkedList
@@ -24,6 +24,19 @@ Type TUtilIniReader
 		End If
 		
 		Return ""
+	End Method
+
+	Method getKey:TUtilIniKey(section:String, key:String)
+		Local found:Int, section2:TUtilIniSection, key2:TUtilIniKey
+		section2 = GetSection(section)
+		
+		If (section2)
+			For key2 = EachIn section2.keys
+				If key2.name.ToLower() = key.ToLower() Then Return key2
+			Next
+		End If
+		
+		RuntimeError "Key " + section + " -> " + key + " not found!"
 	End Method
 	
 	Method GetSection:TUtilIniSection(section:String)
@@ -148,8 +161,8 @@ Type TUtilIniReader
 
 			key = New TUtilIniKey
 			key.name  = line[..found].Replace(" ", "").Replace("	", "")
-			key.value = line[found + 1..].Replace(" ", "").Replace("	", "")
-			section.keys.AddLast(key)
+			key.value = trim(line[found + 1..])
+			section.Keys.AddLast(key)
 		Wend
 
 		stream.Close()

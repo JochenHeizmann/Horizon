@@ -311,6 +311,9 @@ Type TApplication
 
 			
 			If AppTerminate() Then Leave()
+			
+'			Flip 0 ; Continue 
+			
 			Flip(vSync)
 			
 			nextGameTick :+ skipTicks			
