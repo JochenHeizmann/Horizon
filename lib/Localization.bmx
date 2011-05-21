@@ -2,6 +2,7 @@
 
 Import "Language.bmx"
 Import "UtilIniKey.bmx"
+Import "UtilIniSection.bmx"
 
 'shortcut function
 Function _:TUtilIniKey(section:String, key:String)
@@ -48,5 +49,27 @@ Type TLocalization
 	
 	Method Get:TUtilIniKey(section:String, key:String)
 		Return currentLanguage.Get(section, key)
-	End Method	
+	End Method
+	
+	Method Validate()
+		Local error:Byte = False
+		For Local s:TUtilIniSection = EachIn defaultLanguage.lan.sections
+			For Local key:TUtilIniKey = EachIn s.Keys
+				For Local lankey:String = EachIn languages.Keys()
+					Local l:TLanguage = TLanguage(languages.ValueForKey(lankey))
+					If l = defaultLanguage Then Continue
+					Try
+						l.Get(s.name, key.name)
+					Catch e:String
+						Print s.name + "/" + key.name + " not available in language " + lankey
+						error = True
+					End Try
+				Next
+			Next
+		Next
+		If (error)
+			Print "Language File invalid!"
+			End
+		End If
+	End Method
 End Type

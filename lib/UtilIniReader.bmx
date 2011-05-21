@@ -36,7 +36,7 @@ Type TUtilIniReader
 			Next
 		End If
 		
-		RuntimeError "Key " + section + " -> " + key + " not found!"
+		Throw "Key " + section + " -> " + key + " not found!"
 	End Method
 	
 	Method GetSection:TUtilIniSection(section:String)
@@ -161,7 +161,7 @@ Type TUtilIniReader
 
 			key = New TUtilIniKey
 			key.name  = line[..found].Replace(" ", "").Replace("	", "")
-			key.value = trim(line[found + 1..])
+			key.value = Trim(line[found + 1..])
 			section.Keys.AddLast(key)
 		Wend
 
