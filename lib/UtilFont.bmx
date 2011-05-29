@@ -1,11 +1,12 @@
-
+﻿
 SuperStrict
 
 Type TUtilFont
 	Function Draw(txt:String, x:Int, y:Int, boxWidth:Int, lineHeight:Float = 1.5)
 		Local sy:Int = y
-		For Local fline:String = EachIn txt.split("~n")
-			For Local line:String = EachIn fline.split(Chr(KEY_ENTER))
+	
+		For Local f2line:String = EachIn txt.split("~n")
+			For Local line:String = EachIn f2line.split(Chr(KEY_ENTER))
 				If (TextWidth(line) > boxWidth)
 					Local px:Int = x
 					For Local word:String = EachIn line.split(" ")
@@ -28,8 +29,8 @@ Type TUtilFont
 		Local x:Int = 0
 		Local y:Int = 0
 		
-		For Local fline:String = EachIn txt.split("~n")
-			For Local line:String = EachIn fline.split(Chr(KEY_ENTER))
+		For Local f2line:String = EachIn txt.split("~n")
+			For Local line:String = EachIn f2line.split(Chr(KEY_ENTER))
 				If (TextWidth(line) > boxWidth)
 					Local px:Int = x
 					For Local word:String = EachIn line.split(" ")

@@ -15,7 +15,7 @@ Type TUtilIniKey
 		Return Self
 	End Method
 	
-	Method format:String()
+	Method str:String()
 		Local v:String = value
 		For Local key:String = EachIn parameters.Keys()
 			v = v.Replace("{" + key + "}", String(parameters.ValueForKey(key)))

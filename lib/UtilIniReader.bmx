@@ -1,4 +1,4 @@
-﻿SuperStrict
+SuperStrict
 
 Import BRL.FileSystem
 Import BRL.LinkedList
@@ -35,7 +35,6 @@ Type TUtilIniReader
 				If key2.name.ToLower() = key.ToLower() Then Return key2
 			Next
 		End If
-		
 		Throw "Key " + section + " -> " + key + " not found!"
 	End Method
 	
@@ -162,6 +161,7 @@ Type TUtilIniReader
 			key = New TUtilIniKey
 			key.name  = line[..found].Replace(" ", "").Replace("	", "")
 			key.value = Trim(line[found + 1..])
+			key.value = key.value.Replace("~~n", "~n")
 			section.Keys.AddLast(key)
 		Wend
 

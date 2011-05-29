@@ -112,20 +112,14 @@ Type TGuiWidgetList Extends TGuiWidget
 	End Method
 	
 	Method OnMouseOver()
-		DebugLog "GuiWidgetList OnMouseOver"
 		Super.OnMouseOver()
-		OnMouseMove(0,0)
-		DebugLog "GuiWidgetList OnMouseOver END END"
+		OnMouseMove(0, 0)
 	End Method
 	
 	Method OnMouseMove(dx:Int, dy:Int)
-		DebugLog "Call Super.OnMouseMove (TGuiWidgetList)"
 		Super.OnMouseMove(dx, dy)
-		DebugLog "Called...." + entryHeight
 		hoveredId = (TInputControllerMouse.GetInstance().GetY() + offsetY - rect.y) / entryHeight
-		DebugLog "hoverId set"
 		If (hoveredId < 0 Or hoveredId >= CountList(entries)) Then hoveredId = -1
-		DebugLog "End Method"
 	End Method
 	
 	Method OnMouseClick()

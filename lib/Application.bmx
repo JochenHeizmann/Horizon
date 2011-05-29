@@ -1,4 +1,4 @@
-
+﻿
 SuperStrict
 
 Import BRL.GLMax2D
@@ -67,8 +67,6 @@ Type TApplication
 			SetVirtualResolution(width, height)
 			SetViewport(0,0,GraphicsWidth(), GraphicsHeight())
 		End If
-		
-		Print gfx.Driver().toString()
 		
 		If (Not gfx)
 			RuntimeError "No working GFX Driver found!"
