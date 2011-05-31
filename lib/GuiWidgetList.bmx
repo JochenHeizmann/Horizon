@@ -10,8 +10,8 @@ Type TGuiWidgetList Extends TGuiWidget
 	
 	Field entryHeight:Int
 	
-	Field hoveredId:Int
-	Field selectedId:Int
+	Field hovered:Object
+	Field selected:Object
 	
 	Field entries:TList
 	
@@ -21,8 +21,8 @@ Type TGuiWidgetList Extends TGuiWidget
 	Field scrollbar:TGuiScrollbarVertical
 	
 	Method New()
-		selectedId = 0
-		hoveredId = -1
+		selected = Null
+		hovered = Null
 		rect.w = 500
 		rect.h = 340
 		rect.x = 100
@@ -50,7 +50,7 @@ Type TGuiWidgetList Extends TGuiWidget
 		End If
 	End Method
 	
-	Method AddEntry(s:String)
+	Method AddEntry(s:Object)
 		ListAddLast(entries, s) 
 	End Method
 	
@@ -72,9 +72,9 @@ Type TGuiWidgetList Extends TGuiWidget
 		SetImageFont(font)
 		Local y:Float = rect.y - offsetY + PADDING / 2
 		Local w:Float = rect.w
-		If (scrollbar.visible) Then w :- scrollbar.rect.w
+		If (scrollbar.visible) Then w:-scrollbar.rect.w
 		SetViewport(rect.x, rect.y, w, rect.h)
-		SetColor(0,0,0)
+		SetColor(0, 0, 0)
 		Cls
 		SetColor(255,255,255)
 		Local bx:Int, by:Int, bw:Int, bh:Int
@@ -82,16 +82,17 @@ Type TGuiWidgetList Extends TGuiWidget
 		entryHeight = TextHeight("W") + PADDING
 		
 		Local key:Int = 0
-		For Local value:String = EachIn entries
+		For Local obj:Object = EachIn entries
+			Local value:String = obj.toString()
 			bx = rect.x
 			by = y - PADDING / 2
 			bw = w
 			bh = entryHeight
 			
-			If (selectedId = key)
+			If (selected = obj)
 				SetAlpha(0.5)
 				DrawRect bx, by, bw, bh
-			Else If (hoveredId = key)
+			Else If (hovered = obj)
 				SetAlpha(0.25)
 				DrawRect bx, by, bw, bh
 			End If
@@ -112,30 +113,28 @@ Type TGuiWidgetList Extends TGuiWidget
 	End Method
 	
 	Method OnMouseOver()
-		DebugLog "GuiWidgetList OnMouseOver"
 		Super.OnMouseOver()
-		OnMouseMove(0,0)
-		DebugLog "GuiWidgetList OnMouseOver END END"
+		OnMouseMove(0, 0)
 	End Method
 	
 	Method OnMouseMove(dx:Int, dy:Int)
-		DebugLog "Call Super.OnMouseMove (TGuiWidgetList)"
 		Super.OnMouseMove(dx, dy)
-		DebugLog "Called...." + entryHeight
-		hoveredId = (TInputControllerMouse.GetInstance().GetY() + offsetY - rect.y) / entryHeight
-		DebugLog "hoverId set"
-		If (hoveredId < 0 Or hoveredId >= CountList(entries)) Then hoveredId = -1
-		DebugLog "End Method"
+		Local hoveredId:Int = (TInputControllerMouse.GetInstance().GetY() + offsetY - rect.Y) / entryHeight
+		If (CountList(entries) > hoveredId And hoveredId >= 0)
+			hovered = entries.ValueAtIndex(hoveredId)
+		Else
+			hovered = Null
+		End If
 	End Method
 	
 	Method OnMouseClick()
 		Super.OnMouseClick()
-		If hoveredId >= 0 Then selectedId = hoveredId
+		If hovered Then selected = hovered
 	End Method
 	
 	Method OnMouseOut()
 		Super.OnMouseOut()
-		hoveredId = -1
+		hovered = Null
 	End Method
 End Type
 
