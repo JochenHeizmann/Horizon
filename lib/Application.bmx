@@ -1,4 +1,4 @@
-﻿
+
 SuperStrict
 
 Import BRL.GLMax2D
@@ -310,8 +310,10 @@ Type TApplication
 			
 			If AppTerminate() Then Leave()
 			
-'			Flip 0 ; Continue 
-			
+			If (vSync = VSYNC_OFF)
+				Flip 0 ; Continue 
+			End If
+					
 			Flip(vSync)
 			
 			nextGameTick :+ skipTicks			
