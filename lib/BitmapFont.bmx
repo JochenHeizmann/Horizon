@@ -1,4 +1,4 @@
-SuperStrict
+ï»¿SuperStrict
 
 Rem
 
@@ -79,7 +79,6 @@ Function ValidatePath:String (url:String)
 		FixPath(url)
 		If FileType(url) Then Return url
 	Else
-		Print url
 		Return url
 	EndIf
 	Return "failed"
@@ -146,13 +145,13 @@ Type TChaosFont Extends BRL.Font.TFont
 		Return Self.NullGlyph
 	EndMethod
 
-	'Spezieller Loader für BMP und PNG Fonts
+	'Spezieller Loader fÃ¼r BMP und PNG Fonts
 	'url			= Pfad zum Image
-	'tilesize		= Größer der Tiles (16x16, 32x32 usw.)
-	'spacesize	= Größe eines Leerzeichens
+	'tilesize		= GrÃ¶ÃŸer der Tiles (16x16, 32x32 usw.)
+	'spacesize	= GrÃ¶ÃŸe eines Leerzeichens
 	'charlist		= Alle Zeichen des Fonts in Reihenfolge der Tiles
 	'flags		= Siehe BRL.LoadImage
-	'static		= Zeichenabmaße statisch (Breite und Höhe werden als tilesize gesetzt)
+	'static		= ZeichenabmaÃŸe statisch (Breite und HÃ¶he werden als tilesize gesetzt)
 	Function Load:TChaosFont (url:String, tilewidth:Int, tileheight:Int, spacesize:Int, charlist:String, charspacing:Int, imageflags:Int, flags:Int) 
 		If ValidatePath(url) = "failed" 
 			TChaosFont.Error("File "+url+" Not found...")
@@ -172,7 +171,7 @@ Type TChaosFont Extends BRL.Font.TFont
 		Return font
 	EndFunction
 
-	'Fontloader für FontCandy
+	'Fontloader fÃ¼r FontCandy
 	Function FontCandyLoader:TChaosFont (font:TChaosFont, url:String, charlist:String, charspacing:Int)
 		Local stream:TStream = ReadFile(charlist)
 		If Not stream Return Null
@@ -210,7 +209,7 @@ Type TChaosFont Extends BRL.Font.TFont
 		Return font
 	EndFunction
 
-	'Fontloader für Suco-X' Fontextractor Files (*.suc)
+	'Fontloader fÃ¼r Suco-X' Fontextractor Files (*.suc)
 	Function SucoFontLoader:TChaosFont (font:TChaosFont, url:String, charlist:String, charspacing:Int)
 		Local stream:TStream = ReadFile(charlist)
 		If Not stream Return Null
@@ -312,7 +311,7 @@ Type TChaosFont Extends BRL.Font.TFont
 	Function Error (Message:String)
 		Message = "ChaosFont @ "+MilliSecs()+" > ERROR: "+Message
 		?Debug
-			Print Message
+			DebugLog Message
 			Return
 		?
 		Notify Message

@@ -1,4 +1,4 @@
-SuperStrict 
+﻿SuperStrict
 
 Import "ProfileNode.bmx"
 

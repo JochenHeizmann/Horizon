@@ -68,8 +68,6 @@ Type TApplication
 			SetViewport(0,0,GraphicsWidth(), GraphicsHeight())
 		End If
 		
-		Print gfx.Driver().toString()
-		
 		If (Not gfx)
 			RuntimeError "No working GFX Driver found!"
 		End If
@@ -311,6 +309,11 @@ Type TApplication
 
 			
 			If AppTerminate() Then Leave()
+			
+			If (vSync = VSYNC_OFF)
+				Flip 0 ; Continue 
+			End If
+					
 			Flip(vSync)
 			
 			nextGameTick :+ skipTicks			
