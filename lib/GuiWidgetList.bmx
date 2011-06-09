@@ -74,9 +74,11 @@ Type TGuiWidgetList Extends TGuiWidget
 		Local w:Float = rect.w
 		If (scrollbar.visible) Then w :- scrollbar.rect.w
 		SetViewport(rect.x, rect.y, w, rect.h)
-		SetColor(0,0,0)
-		Cls
-		SetColor(255,255,255)
+		SetColor(0, 0, 0)
+		SetAlpha(0.4)
+		DrawRect(rect.X, rect.Y, w, rect.h)
+		SetAlpha(1)
+		SetColor(255, 255, 255)
 		Local bx:Int, by:Int, bw:Int, bh:Int
 		
 		entryHeight = TextHeight("W") + PADDING

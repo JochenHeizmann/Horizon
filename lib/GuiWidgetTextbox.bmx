@@ -57,10 +57,10 @@ Type TGuiWidgetTextbox Extends TGuiWidgetFrame
 		DrawRect x,y, GetInnerWidth(), GetInnerHeight()
 		x :+ PADDING
 		y :+ PADDING
-		SetColor(textColor.r, textColor.g, textColor.b)
 		SetImageFont(font)
-		For Local pos:Int = 0 To text.length
-			Local char:String = Mid(text, pos, 1)
+		For Local Pos:Int = 0 To text.Length
+			SetColor(textColor.r, textColor.g, textColor.B)
+			Local char:String = Mid(text, Pos, 1)
 			
 			Local break : Byte = False
 			Local tmpX : Int = x
@@ -83,8 +83,10 @@ Type TGuiWidgetTextbox Extends TGuiWidgetFrame
 				x :+ TextWidth(char)
 			End If
 			
-			If (TGuiSystem.activeElement = Self And cPos = pos And MilliSecs() / 400 Mod 2 = 0)
-				If cPos = text.length
+			If (TGuiSystem.activeElement = Self And cPos = Pos And MilliSecs() / 400 Mod 2 = 0)
+				SetColor(255 - textColor.r, 255 - textColor.g, 255 - textColor.B)
+				SetColor(0, 0, 0)
+				If cPos = text.Length
 					DrawRect x+2,y, TextWidth("G"), TextHeight("G")-3
 				Else
 					DrawRect x,y, 1, TextHeight("G")-3

@@ -3,13 +3,13 @@
 Import "GuiWidgetButton.bmx"
 
 Type TGuiWidgetButtonImage Extends TGuiWidgetButton
-	Global img:TImage
+	Global IMG:TImage	
 	Field precalcedImage:TImage
 	
 	Method New()
-		If (img = Null) Then img = LoadAnimImage(TGuiSystem.SKIN_PATH + "requester/button.png", 43, 43, 0, 3)
-		If (img = Null) Then RuntimeError("Image not foudn: " + TGuiSystem.SKIN_PATH + "requester/button.png")
-		rect.h = ImageHeight(img)
+		IMG = LoadAnimImage(TGuiSystem.SKIN_PATH + "requester/button.png", 43, 43, 0, 3)
+		If (IMG = Null) Then RuntimeError("Image not foudn: " + TGuiSystem.SKIN_PATH + "requester/button.png")
+		rect.h = ImageHeight(IMG)
 	End Method
 	
 	Method Render()

@@ -50,7 +50,7 @@ Type TApplication
 		End If
 		Return Self.application
 	End Function
-	
+		
 	Function InitGraphics(width:Int, Height:Int, depth:Int = 0, hertz:Int = 0, Flags:Int = 0)
 		?Win32
 			SetGraphicsDriver D3D7Max2DDriver()
