@@ -1,19 +1,12 @@
-
+﻿
 SuperStrict
 
 Import "MusicChannel.bmx"
 
 Rem
-TSoundManager.GetInstance().FreeAll()
-TSoundManager.GetInstance().SetMusicVolume()
 TSoundManager.GetInstance().SetSFXVolume()
-TSoundManager.GetInstance().PlayMusic(file:String, fadeSpeed:Float = 0)
-TSoundManager.GetInstance().FadeOutAll(exceptList:TList = Null)
-TSoundManager.GetInstance().FreeMusic(file:String)
-TSoundManager.GetInstance().PreloadSoundeffects(sfxStringList:TList)
+TSoundManager.GetInstance().PreloadSoundeffects(sfxStringList:String[])
 TSoundManager.GetInstance().PlaySFX(soundeffect:String, volume:Float, panorama:Float, channel = FREE_CHANNEL)
-TSoundManager.GetInstance().FreeAllSFX()
-TSoundManager.GetInstance().Update()
 EndRem
 
 Type TSoundManager
@@ -22,8 +15,9 @@ Type TSoundManager
 	Const SFX_CHANNELS:Int = 8
 	
 	Field musicChannels:TMap
-	Field sfxChannel:TMap
-	Field globalVolume:Float
+	Field sfxSounds:TMap
+	Field globalMusicVolume:Float
+	Field globalSfxVolume:Float
 	
 	Function GetInstance:TSoundManager()
 		If (Not instance)
@@ -32,9 +26,49 @@ Type TSoundManager
 		Return instance
 	End Function
 	
+	Method PreloadSoundEffects(sfxFilenames:String[])
+		For Local I:Int = 0 To sfxFilenames.Length - 1
+			LoadSfx(sfxFilenames[I])
+		Next
+	End Method
+	
+	Method LoadSfx(file:String)
+		Local sfxCh:TSound = TSound(sfxSounds.ValueForKey(file))
+		If (Not sfxCh)
+			Local s:TSound = LoadSound(file)
+			sfxSounds.Insert(file, s)
+		End If
+	End Method
+	
+	Method PlaySfx(file:String, maxVol:Float = 1.0, pan:Float = 0.0)
+		Local sfxCh:TSound = TSound(sfxSounds.ValueForKey(file))
+		?Debug
+		If (Not sfxCh) Then DebugLog "WARNING! Sound " + file + " not loaded!"
+		?
+		If (sfxCh)
+			Local ch:TChannel = CueSound(sfxCh)
+			SetChannelVolume(ch, globalSfxVolume * maxVol)
+			SetChannelPan(ch, pan)
+			ResumeChannel(ch)
+		End If
+	End Method
+	
+	Method FreeMusic()
+		musicChannels.Clear()
+	End Method
+	
+	Method FreeSfx()
+		sfxSounds.Clear()
+	End Method
+	
+	Method FreeAll()
+		FreeMusic()
+		FreeSfx()
+	End Method
+	
 	Method New()
 		musicChannels = CreateMap()
-		sfxChannel = CreateMap()
+		sfxSounds = CreateMap()
 	End Method
 	
 	Method Update()
@@ -45,7 +79,7 @@ Type TSoundManager
 	
 	Method UpdateVolume()
 		For Local mc:TMusicChannel = EachIn musicChannels.Values()
-			mc.volumeFactor = globalVolume
+			mc.volumeFactor = globalMusicVolume
 			mc.UpdateVolume()
 		Next
 	End Method
