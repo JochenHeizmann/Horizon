@@ -191,6 +191,7 @@ Type TApplication
 						exitApp = True
 					Else			
 						TProfile.Clear()		
+						FlushKeys()
 						currentScene.OnEnter()
 						For Local fader:TFader = EachIn faders
 							fader.FadeIn()

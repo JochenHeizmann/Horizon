@@ -25,6 +25,7 @@ Type TGuiBase
 	Method OnMouseMove(dx : Int, dy : Int) Abstract
 	Method OnMouseClick() Abstract
 	Method ToFront() Abstract
+	Method ToBack() Abstract
 
 	Method New()
 		autoRender = True

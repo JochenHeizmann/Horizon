@@ -52,8 +52,10 @@ Type TMusicChannel
 		channel = Null
 		channel = PlaySound(snd, channel)
 		If (fadeIn)
+			state = FADE_IN
 			volume = 0.0
 		Else
+			state = CH_PLAYING
 			volume = maxVol
 		End If
 		SetVolume(volume)
@@ -62,7 +64,6 @@ Type TMusicChannel
 	Method Play(fadeIn:Byte)
 		If (fadeIn) Then State = FADE_IN Else State = CH_PLAYING
 		If (channel)
-			Print "Try to play again!"
 			channel.SetPaused(False)
 			If (Not ChannelPlaying(channel))
 				Restart(fadeIn)
@@ -74,10 +75,9 @@ Type TMusicChannel
 	
 	Method Update()
 		If (Not channel Or Not ChannelPlaying(channel)) Then Return
-		
 		If (state = FADE_IN)
 			volume :+ FADESPEED
-			If (volume >= maxVol) Then volume = maxVol ; State = CH_PLAYING
+			If (volume >= maxVol) Then volume = maxVol ; State = CH_PLAYING ; DebugLog "Maxvol reached: " + maxVol
 			SetVolume(volume)
 		Else If (state = FADE_OUT)
 			volume :- FADESPEED

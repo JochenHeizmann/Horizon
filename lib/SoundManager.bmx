@@ -1,13 +1,7 @@
-﻿
+
 SuperStrict
 
 Import "MusicChannel.bmx"
-
-Rem
-TSoundManager.GetInstance().SetSFXVolume()
-TSoundManager.GetInstance().PreloadSoundeffects(sfxStringList:String[])
-TSoundManager.GetInstance().PlaySFX(soundeffect:String, volume:Float, panorama:Float, channel = FREE_CHANNEL)
-EndRem
 
 Type TSoundManager
 	Global instance:TSoundManager
@@ -36,21 +30,23 @@ Type TSoundManager
 		Local sfxCh:TSound = TSound(sfxSounds.ValueForKey(file))
 		If (Not sfxCh)
 			Local s:TSound = LoadSound(file)
+			If (Not s) Then RuntimeError("sfx file not found: " + file)
 			sfxSounds.Insert(file, s)
 		End If
 	End Method
 	
-	Method PlaySfx(file:String, maxVol:Float = 1.0, pan:Float = 0.0)
+	Method PlaySfx:TChannel(file:String, maxVol:Float = 1.0, pan:Float = 0.0, channel:TChannel = Null)
 		Local sfxCh:TSound = TSound(sfxSounds.ValueForKey(file))
 		?Debug
 		If (Not sfxCh) Then DebugLog "WARNING! Sound " + file + " not loaded!"
 		?
 		If (sfxCh)
-			Local ch:TChannel = CueSound(sfxCh)
-			SetChannelVolume(ch, globalSfxVolume * maxVol)
-			SetChannelPan(ch, pan)
-			ResumeChannel(ch)
+			channel = CueSound(sfxCh)
+			SetChannelVolume(channel, globalSfxVolume * maxVol)
+			SetChannelPan(channel, pan)
+			ResumeChannel(channel)
 		End If
+		Return channel
 	End Method
 	
 	Method FreeMusic()
@@ -100,8 +96,9 @@ Type TSoundManager
 		DebugLog "LoadAndPlayMusic " + name
 		Local newMusicCh:TMusicChannel = TMusicChannel(musicChannels.ValueForKey(name))
 		If (Not newMusicCh)
-			DebugLog "New Channel created: " + name
+			DebugLog "New Channel created: " + name + "vol: " + maxVol
 			newMusicCh = TMusicChannel.Load(name, maxVol)
+			If (Not newMusicCh) Then RuntimeError "Music " + name + " + could not be loaded!"
 			musicChannels.Insert(name, newMusicCh)
 		End If
 		

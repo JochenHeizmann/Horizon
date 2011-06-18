@@ -6,7 +6,7 @@ Import "GuiWidget.bmx"
 Type TGuiWidgetImagebutton Extends TGuiWidget
 	Field img : TImage
 	Field noDownImage : Byte
-
+	
 	Function Create:TGuiWidgetImagebutton(imageFilename:String, x:Int, y:Int, noDownImage:Int = False)
 		Local instance:TGuiWidgetImagebutton = New TGuiWidgetImagebutton
 		instance.rect.SetXY(x, y)
@@ -23,6 +23,8 @@ Type TGuiWidgetImagebutton Extends TGuiWidget
 		instance.img = LoadAnimImage(imageFilename, frameWidth, frameHeight, 0, numImages)
 		Return instance
 	End Function
+
+
 	
 	Method Render()
 		Local frame:Int = 0

@@ -1,4 +1,4 @@
-﻿
+
 SuperStrict
 
 Import "GuiSystem.bmx"
@@ -23,6 +23,7 @@ Type TGuiWidget Extends TGuiBase
 	Field color : TColor
 	
 	Field clicked : Byte
+	Field entered:Byte
 	
 	Method IsChildOf:Byte(element:TGuiBase)
 		If (Not element) Then Return True
@@ -31,6 +32,13 @@ Type TGuiWidget Extends TGuiBase
 			Return parent.IsChildOf(element)
 		End If
 		Return False		
+	End Method
+
+	'dirty helper method because of time pressure, sorry
+	Method IsMouseEntered:Byte()
+		Local ret:Byte = entered
+		entered = False
+		Return (ret)
 	End Method
 
 	Method New()
@@ -49,7 +57,16 @@ Type TGuiWidget Extends TGuiBase
 		For Local c : TGuiBase = EachIn childs
 			c.ToFront()
 		Next
-	End Method	
+	End Method
+	
+	Method ToBack()
+		ListRemove(TGuiSystem.widgets, Self)
+		For Local c : TGuiBase = EachIn childs
+			c.ToBack()
+		Next
+		ListAddFirst(TGuiSystem.widgets, Self)
+	End Method
+		
 	
 	Method OnActivate()
 		ToFront()
@@ -95,12 +112,14 @@ Type TGuiWidget Extends TGuiBase
 	
 	Method OnMouseOut()
 		If (widgetState = HOVER) Then widgetState = NOTHING
+		entered = False
 	End Method
 
 	Method OnMouseOver()
 		If (widgetState = NOTHING) Then widgetState = HOVER
+		entered = True
 	End Method
-		
+	
 	Method OnMouseMove(dx : Int, dy : Int)
 	End Method
 	
