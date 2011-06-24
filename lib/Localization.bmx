@@ -1,4 +1,4 @@
-﻿SuperStrict
+SuperStrict
 
 Import "Language.bmx"
 Import "UtilIniKey.bmx"
