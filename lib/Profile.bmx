@@ -1,6 +1,7 @@
-﻿SuperStrict
+SuperStrict
 
 Import "ProfileNode.bmx"
+Import BRL.Map
 
 Type TProfile
 	Global ENABLED:Byte = False

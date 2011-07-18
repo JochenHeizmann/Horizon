@@ -1,5 +1,7 @@
 SuperStrict
 
+Import BRL.Retro
+
 Type TProfileNode
 	Global completeTime:Float = 0
 

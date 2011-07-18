@@ -20,9 +20,23 @@ Type TGuiSystem
 		mouse = TInputControllerMouse.GetInstance()
 	End Function
 	
-	Function RenderAll()
+	Function RenderAll(darkenBG:Byte = False)
+		Local modElement:TGuiBase = Null
+		If (darkenBG) Then modElement = GetModalElement()
+		
 		For Local w : TGuiBase = EachIn widgets
-			If w.visible And w.autoRender Then w.Render()
+			If w.visible And w.autoRender
+				If (darkenBG And w = modElement)
+					SetAlpha(0.7)
+					SetColor(0,0,0)
+					DrawRect 0,0,GraphicsWidth(), GraphicsHeight()
+					SetColor(255,255,255)
+					SetAlpha(1)
+					w.Render()
+				Else
+					w.Render()
+				End If
+			End If
 		Next
 	End Function
 	
@@ -47,16 +61,18 @@ Type TGuiSystem
 		ListRemove(widgets, w)
 	End Function
 	
-	Function ProcessMessages()
-		Local oldTopElement : TGuiBase = topElement
-		Local modalElement : TGuiBase
-	
+	Function GetModalElement:TGuiBase()
 		For Local w : TGuiBase = EachIn widgets
 			If w.visible And w.isModal
-				modalElement = w
+				Return w
 			End If
 		Next
-		
+	End Function
+	
+	Function ProcessMessages()
+		Local oldTopElement : TGuiBase = topElement
+		Local modalElement : TGuiBase = GetModalElement()
+			
 		If Not mouse.IsMouseDown(mouse.BUTTON_LEFT)
 			topElement = Null
 			For Local w : TGuiBase = EachIn widgets
