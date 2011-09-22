@@ -95,7 +95,7 @@ Type TApplication
 			gfx = Graphics(vw, vh, 0, hertz, Flags)
 		Else
 			gfx = Graphics(TSystemDesktop.GetWidth(), TSystemDesktop.GetHeight(), depth, hertz, Flags)
-			If (gfx) Then RuntimeError("Cannot switch to fullscreen mode.")
+			If (Not gfx) Then RuntimeError("Cannot switch to fullscreen mode.")
 			SetVirtualResolution(vw,vh)
 			SetViewport(0,0,GraphicsWidth(), GraphicsHeight())
 		End If
