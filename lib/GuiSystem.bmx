@@ -20,13 +20,10 @@ Type TGuiSystem
 		mouse = TInputControllerMouse.GetInstance()
 	End Function
 	
-	Function RenderAll(darkenBG:Byte = False)
-		Local modElement:TGuiBase = Null
-		If (darkenBG) Then modElement = GetModalElement()
-		
+	Function RenderAll(darkenBG:Byte = True)
 		For Local w : TGuiBase = EachIn widgets
 			If w.visible And w.autoRender
-				If (darkenBG And w = modElement)
+				If (darkenBG And w = modalElement)
 					SetAlpha(0.7)
 					SetColor(0,0,0)
 					DrawRect 0,0,GraphicsWidth(), GraphicsHeight()
@@ -62,16 +59,18 @@ Type TGuiSystem
 	End Function
 	
 	Function GetModalElement:TGuiBase()
+		Local m:TGuiBase
 		For Local w : TGuiBase = EachIn widgets
 			If w.visible And w.isModal
-				Return w
+				m = w
 			End If
 		Next
+		Return m
 	End Function
 	
 	Function ProcessMessages()
 		Local oldTopElement : TGuiBase = topElement
-		Local modalElement : TGuiBase = GetModalElement()
+		modalElement = GetModalElement()
 			
 		If Not mouse.IsMouseDown(mouse.BUTTON_LEFT)
 			topElement = Null
