@@ -1,4 +1,4 @@
-﻿
+
 SuperStrict
 
 Type TInputControllerMouse
@@ -8,16 +8,21 @@ Type TInputControllerMouse
 	Const BUTTON_RIGHT:Int = 1
 	Const BUTTON_MIDDLE:Int = 2
 	
+	Const DBLCLICK_DELAY:Int = 250
+	
 	Global instance:TInputControllerMouse
 	
 	Field buttonHit:Int[NUM_BUTTONS]
 	Field buttonUp:Int[NUM_BUTTONS]
 	Field buttonDown:Int[NUM_BUTTONS]
 	Field mouseWheel:Int, oldMouseWheel:Int 
+	Field lastHit:Int[NUM_BUTTONS]
 	
 	Field mx:Float, my:Float
 	Field oldMx:Float, oldMy:Float
 	Field dx:Float, dy:Float
+	
+	Field time:Int
 	
 	Function GetInstance:TInputControllerMouse()
 		If Not Self.instance
@@ -27,6 +32,9 @@ Type TInputControllerMouse
 	End Function
 	
 	Method Refresh()
+		RefreshLastHit()
+		
+		time = MilliSecs()
 		RefreshMouseCoords()
 		RefreshMouseHit()
 		RefreshMouseUp()
@@ -37,9 +45,14 @@ Type TInputControllerMouse
 		oldMx = mx
 		oldMy = my
 		mx = VirtualMouseX()
-		my = VirtualMouseY()
+		my = VirtualMouseY()		
 		dx = oldMx - mx
 		dy = oldMy - my
+		If (dx <> 0 Or dy <> 0)
+			For Local i:Int = 0 To NUM_BUTTONS-1
+				lastHit[i] = 0
+			Next
+		End If
 	End Method
 	
 	Method GetX:Float()
@@ -71,6 +84,12 @@ Type TInputControllerMouse
 			buttonHit[i] = MouseHit(i + 1)
 		Next
 	End Method	
+
+	Method RefreshLastHit()
+		For Local i:Int = 0 To NUM_BUTTONS-1
+			If buttonHit[i] Then lastHit[i] = time
+		Next
+	End Method	
 	
 	Method RefreshMouseWheel()
 		mouseWheel = MouseZ() - oldMouseWheel
@@ -83,6 +102,10 @@ Type TInputControllerMouse
 	
 	Method IsMouseHit:Int(btn:Int)
 		Return buttonHit[btn]
+	End Method
+	
+	Method IsDoubleMouseHit:Int(btn:Int)
+		Return (buttonHit[btn] And time > lastHit[btn] And lastHit[btn] + DBLCLICK_DELAY > MilliSecs())
 	End Method
 	
 	Method IsMouseUp:Int(btn:Int)	
