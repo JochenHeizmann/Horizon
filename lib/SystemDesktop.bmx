@@ -1,6 +1,8 @@
 SuperStrict
 
+?Win32
 Import MaxGUI.Win32MaxGUIEx
+?
 Import BaH.MathToolkit
 
 Import brl.standardio
