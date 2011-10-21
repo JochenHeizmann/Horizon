@@ -15,9 +15,9 @@ Type SimpleTween
 		
 		sourceVal = 0
 		destVal = 100
-	End
+	End Method
 	
-	Function Create(sourceVal:Float, destVal:Float, speed:Float = 1.0)
+	Function Create:SimpleTween(sourceVal:Float, destVal:Float, speed:Float = 1.0)
 		Local st:SimpleTween = New SimpleTween
 		st.sourceVal = sourceVal
 		st.destVal = destVal
@@ -29,11 +29,15 @@ Type SimpleTween
 		currentVal = currentStep / steps
 		currentVal = ((currentVal) * (currentVal) * (3 - 2 * (currentVal)))
 		currentVal = (destVal * currentVal) + (sourceVal * (1 - currentVal))
-		currentStep += speed
+		currentStep :+ speed
 		If (currentStep > steps) Then currentStep = steps
-	End		
+	End	Method
 	
-	Method IsFinished:Bool()
+	Method IsFinished:Byte()
 		Return (currentStep >= steps)
 	End Method
-End
+	
+	Method GetValue:Float()
+		Return currentVal
+	End Method
+End Type
