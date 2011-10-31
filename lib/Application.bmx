@@ -1,7 +1,11 @@
 
 SuperStrict
-
+?Win32
+Import BRL.D3D7Max2D
+?
+?Not Win32
 Import BRL.GLMax2D
+?
 Import BRL.Graphics
 
 Import "Scene.bmx"
@@ -311,6 +315,10 @@ Type TApplication
 
 			
 			If AppTerminate() Then Leave()
+			?MacOs
+				If (KeyDown(KEY_LSYS) Or KeyDown(KEY_RSYS)) And KeyDown(KEY_Q) Then Leave()
+				If (KeyDown(KEY_LSYS) Or KeyDown(KEY_RSYS)) And KeyDown(KEY_F) Then ToggleFullscreen()
+			?
 			
 			If (vSync = VSYNC_OFF)
 				Flip 0 ; Continue 

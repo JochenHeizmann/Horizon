@@ -1,5 +1,5 @@
 SuperStrict
-
+Import BRL.LinkedList
 Import "Rect.bmx"
 
 Type TGuiBase

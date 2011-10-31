@@ -1,6 +1,7 @@
 
 SuperStrict
 
+Import BRL.Map
 Import "MusicChannel.bmx"
 
 Type TSoundManager

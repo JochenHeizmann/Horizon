@@ -1,5 +1,5 @@
 
-Type SimpleTween
+Type TSimpleTween
 	Field steps:Float
 	Field currentStep:Float
 	Field speed:Float
@@ -17,8 +17,8 @@ Type SimpleTween
 		destVal = 100
 	End Method
 	
-	Function Create:SimpleTween(sourceVal:Float, destVal:Float, speed:Float = 1.0)
-		Local st:SimpleTween = New SimpleTween
+	Function Create:TSimpleTween(sourceVal:Float, destVal:Float, speed:Float = 1.0)
+		Local st:TSimpleTween = New TSimpleTween
 		st.sourceVal = sourceVal
 		st.destVal = destVal
 		st.speed = speed
@@ -39,5 +39,9 @@ Type SimpleTween
 	
 	Method GetValue:Float()
 		Return currentVal
+	End Method
+	
+	Method Reset()
+		currentStep = 0
 	End Method
 End Type

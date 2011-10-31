@@ -1,4 +1,6 @@
-﻿SuperStrict
+SuperStrict
+
+Import BRL.Map
 
 Type TUtilIniKey
 	Field name  : String

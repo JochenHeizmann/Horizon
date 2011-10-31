@@ -1,5 +1,7 @@
-﻿
+
 SuperStrict
+
+Import BRL.Max2D
 
 Type TUtilFont
 	Function Draw(txt:String, x:Int, y:Int, boxWidth:Int, lineHeight:Float = 1.5)

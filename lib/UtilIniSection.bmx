@@ -1,5 +1,7 @@
 SuperStrict
 
+Import BRL.LinkedList
+
 Type TUtilIniSection
 	Field name : String
 	Field keys : TList

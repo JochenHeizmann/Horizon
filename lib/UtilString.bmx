@@ -1,6 +1,8 @@
 
 SuperStrict
 
+Import BRL.Retro
+
 Type TUtilString
 	Function Split:String[](text:String, delim:String)
 		Local textArr:String[1]

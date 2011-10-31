@@ -1,6 +1,9 @@
 SuperStrict
 
 Import "Point.bmx"
+Import BRL.LinkedList
+Import BRL.Max2D
+
 
 Type TPath
 	Field Points:TList

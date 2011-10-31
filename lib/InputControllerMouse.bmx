@@ -1,6 +1,8 @@
 
 SuperStrict
 
+Import BRL.Max2D
+
 Type TInputControllerMouse
 	Const NUM_BUTTONS:Int = 3
 	

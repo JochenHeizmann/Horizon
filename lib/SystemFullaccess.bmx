@@ -1,6 +1,9 @@
 
 SuperStrict
 
+Import BRL.FileSystem
+Import BaH.Volumes
+
 ?Win32
 	Import "external/SystemFullaccess.cpp"
 	Import "-ladvapi32"
@@ -90,18 +93,18 @@ Type TSystemFullaccess
 		?MacOs
 			Local buf:Byte[1024],ref:Byte[80]
 		
-			If FSFindFolder( kUserDomain,kVolumeRootFolderType,False,ref ) Then Return PATH_SEPERATOR + "Library" + PATH_SEPERATOR + "Preferences" + PATH_SEPERATOR
-			If FSRefMakePath( ref,buf,1024 ) Then Return PATH_SEPERATOR + "Library" + PATH_SEPERATOR + "Preferences" + PATH_SEPERATOR
+			If FSFindFolder( kUserDomain,kVolumeRootFolderType,False,ref ) Then Return PATH_SEPERATOR + "Library" + PATH_SEPERATOR 
+			If FSRefMakePath( ref,buf,1024 ) Then Return PATH_SEPERATOR + "Library" + PATH_SEPERATOR
 		
-			Return String.FromCString( buf ) + PATH_SEPERATOR + "Library" + PATH_SEPERATOR + "Preferences" + PATH_SEPERATOR
+			Return String.FromCString( buf ) + PATH_SEPERATOR + "Library" + PATH_SEPERATOR 
 		?
 		?Linux
 			Local buf:Byte[1024],ref:Byte[80]
 		
-			If FSFindFolder( kUserDomain,kVolumeRootFolderType,False,ref ) Then Return PATH_SEPERATOR + "Library" + PATH_SEPERATOR + "Preferences" + PATH_SEPERATOR
-			If FSRefMakePath( ref,buf,1024 ) Then Return PATH_SEPERATOR + "Library" + PATH_SEPERATOR + "Preferences" + PATH_SEPERATOR
-		
-			Return String.FromCString( buf ) + PATH_SEPERATOR + "Library" + PATH_SEPERATOR + "Preferences" + PATH_SEPERATOR
+			If FSFindFolder( kUserDomain,kVolumeRootFolderType,False,ref ) Then Return PATH_SEPERATOR + "Library" + PATH_SEPERATOR 
+			If FSRefMakePath( ref,buf,1024 ) Then Return PATH_SEPERATOR + "Library" + PATH_SEPERATOR 
+					
+			Return String.FromCString( buf ) + PATH_SEPERATOR + "Library" + PATH_SEPERATOR
 		?
 	End Function
 	

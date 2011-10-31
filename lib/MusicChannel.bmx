@@ -1,6 +1,30 @@
 
 SuperStrict
 
+Import BRL.Audio
+
+?Win32
+Import BRL.DirectSoundAudio
+?
+
+?Linux
+Import BRL.OpenALAudio
+?
+
+?MacOS
+Import BRL.FreeAudioAudio
+?
+
+Import BRL.OGGLoader
+
+?Linux
+If EnableOpenALAudio()
+	SetAudioDriver("OpenAL Default")
+Else 
+	SetAudioDriver("FreeAudio")
+End If
+?
+
 Type TMusicChannel
 	Const FADE_IN:Int = 0
 	Const FADE_OUT:Int = 1

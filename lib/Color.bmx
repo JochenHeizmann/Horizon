@@ -1,6 +1,8 @@
 
 SuperStrict
 
+Import BRL.Max2D
+
 Type TColor
 	Field r : Int, g : Int, b : Int
 
