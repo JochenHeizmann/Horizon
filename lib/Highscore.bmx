@@ -1,6 +1,7 @@
 
 SuperStrict
 
+Import BRL.LinkedList
 Import "HighscoreEntry.bmx"
 
 Type THighscore

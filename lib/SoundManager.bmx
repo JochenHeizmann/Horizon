@@ -8,6 +8,7 @@ Import BRL.DirectSoundAudio
 ?Linux
 Import BRL.OpenALAudio
 ?
+Import BRL.Map
 Import "MusicChannel.bmx"
 
 ?Linux

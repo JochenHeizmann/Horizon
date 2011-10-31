@@ -1,6 +1,8 @@
 
 SuperStrict
-
+Import BRL.Retro
+Import BRL.Max2D
+Import BRL.PNGLoader
 Import "GuiWidgetFrame.bmx"
 Import "Color.bmx"
 

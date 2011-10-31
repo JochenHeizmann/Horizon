@@ -2,6 +2,8 @@ SuperStrict
 
 Import BRL.FileSystem
 Import BRL.LinkedList
+Import BRL.Stream
+Import BRL.Retro
 
 Import "UtilIniSection.bmx"
 Import "UtilIniKey.bmx"
