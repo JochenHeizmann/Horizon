@@ -66,13 +66,6 @@ SuperStrict
 
 ?Linux
 	Const PATH_SEPERATOR:String = "/"
-	Const kUserDomain:Int=-32763
-	Const kVolumeRootFolderType:Int=Asc("r") Shl 24 | Asc("o") Shl 16 | Asc( "o") Shl 8 | Asc("t")
-	
-	Extern
-		Function FSFindFolder( vRefNum:Int,folderType:Int,createFolder:Byte,foundRef:Byte Ptr )
-		Function FSRefMakePath( ref:Byte Ptr,path:Byte Ptr,maxPathsize:Int )
-	End Extern
 ?
 
 Type TSystemFullaccess	
@@ -95,14 +88,8 @@ Type TSystemFullaccess
 		
 			Return String.FromCString( buf ) + PATH_SEPERATOR + "Library" + PATH_SEPERATOR + "Preferences" + PATH_SEPERATOR
 		?
-		?Linux
-			Local buf:Byte[1024],ref:Byte[80]
 		
-			If FSFindFolder( kUserDomain,kVolumeRootFolderType,False,ref ) Then Return PATH_SEPERATOR + "Library" + PATH_SEPERATOR + "Preferences" + PATH_SEPERATOR
-			If FSRefMakePath( ref,buf,1024 ) Then Return PATH_SEPERATOR + "Library" + PATH_SEPERATOR + "Preferences" + PATH_SEPERATOR
-		
-			Return String.FromCString( buf ) + PATH_SEPERATOR + "Library" + PATH_SEPERATOR + "Preferences" + PATH_SEPERATOR
-		?
+		Return CurrentDir() + PATH_SEPERATOR
 	End Function
 	
 	Function SetPath(mypath:String)

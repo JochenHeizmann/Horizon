@@ -1,6 +1,6 @@
 SuperStrict
 Import "UtilImage.bmx"
-Import "GuiWidgetImagebutton.bmx"
+Import "GuiWidgetImageButton.bmx"
 Import "GuiWidget.bmx"
 
 Type TGuiScrollbarVertical Extends TGuiWidget

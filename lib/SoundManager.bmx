@@ -1,7 +1,23 @@
 
 SuperStrict
 
+Import BRL.Audio
+?Win32
+Import BRL.DirectSoundAudio
+?
+?Linux
+Import BRL.OpenALAudio
+?
 Import "MusicChannel.bmx"
+
+?Linux
+If EnableOpenALAudio()
+	SetAudioDriver("OpenAL Default")
+Else
+	SetAudioDriver("FreeAudio")
+End If
+?
+
 
 Type TSoundManager
 	Global instance:TSoundManager
