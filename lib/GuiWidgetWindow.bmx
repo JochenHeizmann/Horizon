@@ -30,45 +30,52 @@ Type TGuiWidgetWindow Extends TGuiWidgetFrame
 	Const STYLE_ZORDER:Int	= %00010000
 	Const STYLE_FULL:Int		= STYLE_CLOSE|STYLE_FOLD|STYLE_DRAG|STYLE_RESIZE|STYLE_ZORDER
 
-	Function Create : TGuiWidgetWindow(x:Int, y:Int, w:Int = 0, h:Int = 0,style:Int = STYLE_DRAG)
+	Function Create : TGuiWidgetWindow(x:Int, y:Int, w:Int = 0, h:Int = 0,style:Int = STYLE_FULL)
 		Local instance : TGuiWidgetWindow = New TGuiWidgetWindow
 		instance.rect.x = x
 		instance.rect.y = y
 		instance.rect.w = w
 		instance.rect.h = h
-		instance.style = style		
+		instance.style = style
+		instance.SetStyle(style)		
 		Return instance
-	End Function	
+	End Function
 	
-	Method SetStyle(winStyle:Int, align:Int = TITLE_CENTER )
+	Method New()
+		style = STYLE_FULL
+		InitWidget()
+	End Method
+	
+	Method SetStyle(winStyle:Int = STYLE_FULL, align:Int = TITLE_CENTER )
 		style = winStyle
 		titleAlign = align
-		If (style & STYLE_CLOSE)
+		If (style & STYLE_CLOSE) And Not btnClose
 			btnClose = TGuiWidgetImagebutton.Create(TGuiSystem.SKIN_PATH + "window/close.png", 25, 25)
 			AddChild(btnClose)
 			btnClose.rect.y = GetY()
 			btnClose.rect.x = GetX() + btnClose.rect.w * buttons
 			buttons :+ 1
 		EndIf
-		If (style & STYLE_FOLD)
+		If (style & STYLE_FOLD) And Not btnFold
 			btnFold = TGuiWidgetImagebutton.Create(TGuiSystem.SKIN_PATH + "window/minimize.png", 25, 25)
 			AddChild(btnFold)
 			btnFold.rect.y = GetY()
 			btnFold.rect.x = GetX() + 4 + btnFold.rect.w * buttons
 			buttons :+ 1
 		EndIf
-		If (style & STYLE_ZORDER)
+		If (style & STYLE_ZORDER) And Not btnZOrder
 			btnZOrder = TGuiWidgetImagebutton.Create(TGuiSystem.SKIN_PATH + "window/zorder.png", 25, 25)
 			AddChild(btnZOrder)
 			btnZOrder.rect.y = GetY()
 			btnZOrder.rect.x = GetX() + 4 + btnZOrder.rect.w * buttons
 			buttons :+ 1
 		EndIf
-		If (style & STYLE_RESIZE)
+		If (style & STYLE_RESIZE) And Not btnResize
 			btnResize = TGuiWidgetImagebutton.Create(TGuiSystem.SKIN_PATH + "window/resize.png", 25, 25)
 			AddChild(btnResize)
 			btnResize.rect.y = GetY() + GetH() - btnResize.rect.h - 1
 			btnResize.rect.x = GetX() + GetW() - btnResize.rect.w - 1
+			buttons :+ 1
 		EndIf
 	End Method
 	
@@ -111,7 +118,7 @@ Type TGuiWidgetWindow Extends TGuiWidgetFrame
 	
 	Method DrawTopBar()
 		TUtilImage.DrawRepeated(topBar, GetX(), GetY(), rect.w, ImageHeight(topBar))		
-		Local offset:Int = buttons*24
+		Local offset:Int = (buttons-1)*24
 		SetViewport(GetX()+offset, GetY(), GetW()-offset-2, ImageHeight(topBar))
 		Select titleAlign
 			Case TITLE_CENTER
@@ -125,6 +132,16 @@ Type TGuiWidgetWindow Extends TGuiWidgetFrame
 		SetOrigin(0,0)
 	End Method
 
+	Method DrawBottomBorder()
+		TUtilImage.DrawRepeated(resizeBottom, GetX(), GetY() + rect.h - ImageHeight(resizeBottom) - ImageHeight(bottomBorder), rect.w, ImageHeight(resizeBottom))
+		SetColor($CC,$CC,$CC)
+		SetViewport(GetX(), GetY() + rect.h - ImageHeight(resizeBottom), GetW()-2, ImageHeight(resizeBottom))
+		DrawText (status, GetX() + ImageWidth(leftBorder), GetY() + rect.h - ImageHeight(resizeBottom))
+		SetColor($FF,$FF,$FF)
+		SetViewport(0,0,GraphicsWidth(), GraphicsHeight())
+		SetOrigin(0,0)
+		TUtilImage.DrawRepeated(bottomBorder, GetX(), GetY() + rect.h - ImageHeight(bottomBorder), rect.w, ImageHeight(bottomBorder))		
+	End Method	
 
 	Method Update()
 		Super.Update()
@@ -133,10 +150,9 @@ Type TGuiWidgetWindow Extends TGuiWidgetFrame
 			If rect.w < minW Then rect.w = minW
 			rect.h = GetH() - TGuiSystem.mouse.GetDY()
 			If rect.h < minH Then rect.h = minH
-			DrawTopBar()
 			btnResize.rect.y = GetY() + GetH() - btnResize.rect.h - 1
-			btnResize.rect.x = GetX() + GetW() - btnResize.rect.w - 1 
+			btnResize.rect.x = GetX() + GetW() - btnResize.rect.w - 1
 		EndIf
 		If btnFold And btnFold.IsClicked() Then Fold()
-	End Method			
+	End Method
 End Type

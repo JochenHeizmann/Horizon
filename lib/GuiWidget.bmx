@@ -50,14 +50,44 @@ Type TGuiWidget Extends TGuiBase
 		color = TColor.Create(255, 255, 255)
 		ListAddLast(TGuiSystem.widgets, Self)
 	End Method
-	
+
 	Method ToFront()
-		ListRemove(TGuiSystem.widgets, Self)
-		ListAddLast(TGuiSystem.widgets, Self)
-		For Local c : TGuiBase = EachIn childs
-			c.ToFront()
-		Next
+		Local tmpParent:TGuiBase = Self.parent
+		If tmpParent
+			DebugLog "There is a parent"
+			Local root:TGuiBase
+			While tmpParent
+				root = tmpParent
+				tmpParent = TGuiWidget(root).parent
+			Wend
+			ListRemove(TGuiSystem.widgets, root)
+			ListAddLast(TGuiSystem.widgets, root)
+			For Local c : TGuiBase = EachIn root.childs
+				TGuiWidget(c).ChildsToFront()
+			Next
+		Else
+			DebugLog "There is no parent"
+			ChildsToFront()
+		EndIf
+	End Method	
+
+	Method ChildsToFront()
+			ListRemove(TGuiSystem.widgets, Self)
+			ListAddLast(TGuiSystem.widgets, Self)
+			For Local c : TGuiWidget = EachIn childs
+				c.ChildsToFront()
+			Next
 	End Method
+	
+	Rem
+	Method ToFront()
+			ListRemove(TGuiSystem.widgets, Self)
+			ListAddLast(TGuiSystem.widgets, Self)
+			For Local c : TGuiBase = EachIn childs
+				c.ToFront()
+			Next
+	End Method
+	EndRem
 	
 	Method ToBack()
 		ListRemove(TGuiSystem.widgets, Self)
@@ -66,7 +96,6 @@ Type TGuiWidget Extends TGuiBase
 		Next
 		ListAddFirst(TGuiSystem.widgets, Self)
 	End Method
-		
 	
 	Method OnActivate()
 		ToFront()

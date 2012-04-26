@@ -8,8 +8,8 @@ Import "../../lib/GuiWidgetWindow.bmx"
 TGuiSystem.SKIN_PATH = "../../data/gui/default/"
 
 TApplication.SetName("Test")
-'TApplication.InitGraphics(DesktopWidth(), DesktopHeight(), DesktopDepth())
-TApplication.InitGraphics(800, 600)
+TApplication.InitGraphics(DesktopWidth(), DesktopHeight(), DesktopDepth())
+'TApplication.InitGraphics(800, 600)
 TGuiSystem.Init()
 
 Local myApp:TApplication = TApplication.GetInstance()
@@ -23,14 +23,44 @@ Type TSceneWindow Extends TScene
 	Field win3:TGuiWidgetWindow
 	Field bg:TImage
 	
+	Method DrawBg()
+		Const bold:Int = 6
+		For Local row:Int = 0 To GraphicsHeight() Step bold
+			SetColor(Rand(254),Rand(254),Rand(254))
+			For Local chunk:Int = row To row + bold
+				DrawLine 0, chunk, GraphicsWidth(), chunk
+			Next
+		Next
+		SetColor(255,255,255)
+	End Method
+	
 	Method Update()
 		TGuiSystem.ProcessMessages()
+		
+		If win
+			win.SetStatus("State = " + win.GetWidgetState())
+			If win.btnClose And win.btnClose.IsClicked() Then TGuiSystem.RemoveWidget(win)
+		EndIf
+		
+		If win2
+			win2.SetStatus("State = " + win2.GetWidgetState())
+			If win2.btnClose And win2.btnClose.IsClicked() Then TGuiSystem.RemoveWidget(win2)
+		EndIf
+		
+		If win3
+			win3.SetStatus("State = " + win3.GetWidgetState())
+			If win3.btnClose And win3.btnClose.IsClicked() Then TGuiSystem.RemoveWidget(win3)
+		EndIf
+		
+		If TGuiSystem.widgets.IsEmpty() Then TApplication.GetInstance().Leave()
 		If KeyDown(KEY_ESCAPE) Then TApplication.GetInstance().Leave()
-		If win.btnClose And win.btnClose.IsClicked() Then TApplication.GetInstance().Leave()
 	End Method
 	
 	Method Render()
-		DrawImage bg, 0, 0	
+		'DrawImage bg, 0, 0
+		'Drawbg()
+		SetClsColor(50,50,100)
+		Cls
 		TGuiSystem.RenderAll()
 	End Method
 	
@@ -55,11 +85,7 @@ Type TSceneWindow Extends TScene
 		'IMPORTANT: if SetStyle call is omitted, window simply behaves as a frame.
 		win2.SetStyle(TGuiWidgetWindow.STYLE_FULL, TGuiWidgetWindow.TITLE_RIGHT)
 		
-		win3 = New TGuiWidgetWindow
-		win3.rect.x = 200
-		win3.rect.y = 340
-		win3.rect.w = 500
-		win3.rect.h = 120
+		win3 = TGuiWidgetWindow.Create(200, 340, 500, 120, TGuiWidgetWindow.STYLE_FULL)
 		win3.title = "Title bar text is on left and automatically clipped."
 		'IMPORTANT: if SetStyle call is omitted, window simply behaves as a frame.
 		win3.SetStyle(TGuiWidgetWindow.STYLE_FULL, TGuiWidgetWindow.TITLE_LEFT)
@@ -69,7 +95,7 @@ Type TSceneWindow Extends TScene
 	
 	Method OnLeave()
 		win = Null
-		win2 = Null
-		win3 = Null
+		If win2 Then win2 = Null
+		If win3 Then win3 = Null
 	End Method
 End Type
