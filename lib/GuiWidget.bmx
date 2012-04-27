@@ -1,4 +1,3 @@
-
 SuperStrict
 
 Import "GuiSystem.bmx"
@@ -52,14 +51,9 @@ Type TGuiWidget Extends TGuiBase
 	End Method
 
 	Method ToFront()
-		Local tmpParent:TGuiBase = Self.parent
-		If tmpParent
+		Local root:TGuiBase = GetRootParent(Self.parent)
+		If root
 			DebugLog "There is a parent"
-			Local root:TGuiBase
-			While tmpParent
-				root = tmpParent
-				tmpParent = TGuiWidget(root).parent
-			Wend
 			ListRemove(TGuiSystem.widgets, root)
 			ListAddLast(TGuiSystem.widgets, root)
 			For Local c : TGuiBase = EachIn root.childs
@@ -69,7 +63,19 @@ Type TGuiWidget Extends TGuiBase
 			DebugLog "There is no parent"
 			ChildsToFront()
 		EndIf
-	End Method	
+	End Method
+	
+	Function GetRootParent:TGuiBase(widget:TGuiBase)
+		If widget
+			Local root:TGuiBase
+			While widget
+				root = widget
+				widget = TGuiWidget(root).parent
+			Wend
+			Return root
+		EndIf
+		Return Null
+	End Function
 
 	Method ChildsToFront()
 			ListRemove(TGuiSystem.widgets, Self)
@@ -78,16 +84,6 @@ Type TGuiWidget Extends TGuiBase
 				c.ChildsToFront()
 			Next
 	End Method
-	
-	Rem
-	Method ToFront()
-			ListRemove(TGuiSystem.widgets, Self)
-			ListAddLast(TGuiSystem.widgets, Self)
-			For Local c : TGuiBase = EachIn childs
-				c.ToFront()
-			Next
-	End Method
-	EndRem
 	
 	Method ToBack()
 		ListRemove(TGuiSystem.widgets, Self)
