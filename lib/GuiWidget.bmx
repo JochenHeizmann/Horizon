@@ -1,4 +1,3 @@
-
 SuperStrict
 
 Import "GuiSystem.bmx"
@@ -50,13 +49,36 @@ Type TGuiWidget Extends TGuiBase
 		color = TColor.Create(255, 255, 255)
 		ListAddLast(TGuiSystem.widgets, Self)
 	End Method
-	
+
 	Method ToFront()
-		ListRemove(TGuiSystem.widgets, Self)
-		ListAddLast(TGuiSystem.widgets, Self)
-		For Local c : TGuiBase = EachIn childs
-			c.ToFront()
-		Next
+		Local root:TGuiBase = GetRootParent(Self.parent)
+		If root
+			DebugLog "There is a parent"
+			TGuiWidget(root).ChildsToFront()
+		Else
+			DebugLog "There is no parent"
+			ChildsToFront()
+		EndIf
+	End Method
+	
+	Function GetRootParent:TGuiBase(widget:TGuiBase)
+		If widget
+			Local root:TGuiBase
+			While widget
+				root = widget
+				widget = TGuiWidget(root).parent
+			Wend
+			Return root
+		EndIf
+		Return Null
+	End Function
+
+	Method ChildsToFront()
+			ListRemove(TGuiSystem.widgets, Self)
+			ListAddLast(TGuiSystem.widgets, Self)
+			For Local c : TGuiWidget = EachIn childs
+				c.ChildsToFront()
+			Next
 	End Method
 	
 	Method ToBack()
@@ -66,7 +88,6 @@ Type TGuiWidget Extends TGuiBase
 		Next
 		ListAddFirst(TGuiSystem.widgets, Self)
 	End Method
-		
 	
 	Method OnActivate()
 		ToFront()
