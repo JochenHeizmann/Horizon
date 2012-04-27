@@ -54,11 +54,7 @@ Type TGuiWidget Extends TGuiBase
 		Local root:TGuiBase = GetRootParent(Self.parent)
 		If root
 			DebugLog "There is a parent"
-			ListRemove(TGuiSystem.widgets, root)
-			ListAddLast(TGuiSystem.widgets, root)
-			For Local c : TGuiBase = EachIn root.childs
-				TGuiWidget(c).ChildsToFront()
-			Next
+			TGuiWidget(root).ChildsToFront()
 		Else
 			DebugLog "There is no parent"
 			ChildsToFront()
