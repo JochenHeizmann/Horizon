@@ -1,6 +1,6 @@
-﻿
+
 SuperStrict
-Import "UtilImage.bmx"
+Import "GuiUtilImage.bmx"
 Import "GuiWidgetImageButton.bmx"
 Import "GuiWidget.bmx"
 Import "GuiScrollbarVertical.bmx"
@@ -68,12 +68,26 @@ Type TGuiWidgetList Extends TGuiWidget
 	End Method
 	
 	Method Render()
+		Local oldViewportX:Int, oldViewportY:Int, oldViewportW:Int, oldViewportH:Int
+
+		oldViewportX = TGuiVP.vpX
+		oldViewportY = TGuiVP.vpY
+		oldViewportW = TGuiVP.vpW
+		oldViewportH = TGuiVP.vpH
 		UpdateScrollbar()
 		SetImageFont(font)
 		Local y:Float = rect.y - offsetY + PADDING / 2
 		Local w:Float = rect.w
 		If (scrollbar.visible) Then w:-scrollbar.rect.w
-		SetViewport(rect.x, rect.y, w, rect.h)
+		Local tx:Int,ty:Int,tw:Int,th:Int
+		tx = rect.x
+		ty = rect.y
+		tw = w
+		If tw > oldViewportW Then tw = oldViewportW
+		th = rect.h
+		If th + ty > oldViewportH Then th = oldViewportH - ty
+		'SetViewport(tx, ty , tw, th)
+		TGuiVP.Add(tx, ty , tw, th)
 		SetColor(0, 0, 0)
 		SetAlpha(0.4)
 		DrawRect(rect.X, rect.Y, w, rect.h)
@@ -103,7 +117,9 @@ Type TGuiWidgetList Extends TGuiWidget
 			y :+ entryHeight
 			key :+ 1
 		Next
-		SetViewport(0, 0, VirtualResolutionWidth(), VirtualResolutionHeight())
+		'SetViewport(0, 0, VirtualResolutionWidth(), VirtualResolutionHeight())
+		'SetViewport(oldViewportX, oldViewportY, oldViewportW, oldViewportH)
+		TGuiVP.Pop()
 	End Method
 	
 	Method GetDisplayHeight:Float()

@@ -1,7 +1,7 @@
 
 SuperStrict
 
-Import "UtilImage.bmx"
+Import "GuiUtilImage.bmx"
 Import "GuiWidget.bmx"
 
 Type TGuiWidgetFrame Extends TGuiWidget
@@ -85,25 +85,25 @@ Type TGuiWidgetFrame Extends TGuiWidget
 	End Method
 		
 	Method DrawTopBar()
-		TUtilImage.DrawRepeated(topBar, GetX(), GetY(), rect.w, ImageHeight(topBar))		
+		TGuiUtilImage.DrawRepeated(topBar, GetX(), GetY(), rect.w, ImageHeight(topBar))		
 '		DrawText (title, GetX() + ((style & STYLE_CLOSE) * closeButton.w) + 2, GetY() + 6)
 		DrawText (title, GetX() + 2, GetY() + 6)
 	End Method
 	
 	Method DrawRightBorder()
-		TUtilImage.DrawRepeated(rightBorder, GetX() + rect.w - ImageWidth(rightBorder), GetY() + ImageHeight(topBar), ImageWidth(rightBorder), rect.h - ImageHeight(topBar))
+		TGuiUtilImage.DrawRepeated(rightBorder, GetX() + rect.w - ImageWidth(rightBorder), GetY() + ImageHeight(topBar), ImageWidth(rightBorder), rect.h - ImageHeight(topBar))
 	End Method
 	
 	Method DrawLeftBorder()
-		TUtilImage.DrawRepeated(leftBorder, GetX(), GetY() + ImageHeight(topBar), ImageWidth(leftBorder), rect.h - ImageHeight(topBar))
+		TGuiUtilImage.DrawRepeated(leftBorder, GetX(), GetY() + ImageHeight(topBar), ImageWidth(leftBorder), rect.h - ImageHeight(topBar))
 	End Method
 	
 	Method DrawBottomBorder()
-		TUtilImage.DrawRepeated(resizeBottom, GetX(), GetY() + rect.h - ImageHeight(resizeBottom) - ImageHeight(bottomBorder), rect.w, ImageHeight(resizeBottom))
+		TGuiUtilImage.DrawRepeated(resizeBottom, GetX(), GetY() + rect.h - ImageHeight(resizeBottom) - ImageHeight(bottomBorder), rect.w, ImageHeight(resizeBottom))
 		SetColor($CC,$CC,$CC)
 		DrawText (status, GetX() + ImageWidth(leftBorder), GetY() + rect.h - ImageHeight(resizeBottom))
 		SetColor($FF,$FF,$FF)
-		TUtilImage.DrawRepeated(bottomBorder, GetX(), GetY() + rect.h - ImageHeight(bottomBorder), rect.w, ImageHeight(bottomBorder))		
+		TGuiUtilImage.DrawRepeated(bottomBorder, GetX(), GetY() + rect.h - ImageHeight(bottomBorder), rect.w, ImageHeight(bottomBorder))		
 	End Method	
 	
 	Method SetTitle(t : String)

@@ -79,7 +79,7 @@ Type TGuiWidgetButton Extends TGuiWidget
 		If (GetWidgetState() = HOVER) Then SetColor(255,255,255) Else SetColor(192,192,192)
 
 		DrawText text, off + rect.x + (rect.w / 2) - TextWidth(text) / 2, off + rect.y + (rect.h / 2) - TextHeight(text) / 2
-		SetColor(255, 255, 255)		
+		SetColor(255, 255, 255)	
 	End Method	
 End Type
 

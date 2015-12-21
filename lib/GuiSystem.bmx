@@ -15,9 +15,20 @@ Type TGuiSystem
 
 	Global SKIN_PATH:String = "data/gui/default/"
 
+	Function ResetVP()
+		TGuiVP.vpX = 0
+		TGuiVP.vpY = 0
+		TGuiVP.vpW = VirtualResolutionWidth()
+		TGuiVP.vpH = VirtualResolutionHeight()
+		SetViewport(TGuiVP.vpX, TGuiVP.vpY, TGuiVP.vpW, TGuiVP.vpH)
+		SetOrigin(0,0)
+	End Function
+		
 	Function Init()
 		widgets = CreateList()
 		mouse = TInputControllerMouse.GetInstance()
+		ResetVP()
+		TGuiVP.Add(0,0,VirtualResolutionWidth(),VirtualResolutionHeight())
 	End Function
 	
 	Function RenderAll(darkenBG:Byte = True)
@@ -141,3 +152,40 @@ Type TGuiSystem
 	End Function
 End Type
 
+
+Type TGuiVP
+	Field x:Int, y:Int, w:Int, h:Int			'This viewport
+	Global VPs:TList = New TList				'Viewports list
+	Global vpX:Int, vpY:Int, vpW:Int, vpH:Int	'Current ViewPort
+	
+	Function Push()
+		Local vp:TGuiVP = New TGuiVP
+		vp.x = vpX;vp.y = vpY;vp.w = vpW;vp.h = vpH
+		VPs.AddFirst(vp)
+	End Function
+
+	Function Pop()
+		Local vp:TGuiVP = TGuiVP(VPs.RemoveFirst())
+		vpX = vp.x;vpY = vp.y;vpW = vp.w;vpH = vp.h
+		SetViewport(vpX,vpY,vpW,vpH)
+	End Function
+
+	Function Add(iX:Int, iY:Int, iW:Int, iH:Int)
+		Local vp:TGuiVP = New TGuiVP
+		vp.x = vpX;vp.y = vpY;vp.w = vpW;vp.h = vpH
+		VPs.AddFirst(vp)
+		If iX < vp.x
+		 iW:-(vp.x - iX)
+			iX = vp.X
+		End If
+		If iY < vp.y
+			iH:-(vp.y - iY)
+		 iY = vp.y
+		End If
+		If iX + iW > vp.x + vp.w iW:-((iX + iW) - (vp.x + vp.w))
+		If iY + iH > vp.y + vp.h iH:-((iy + iH) - (vp.y + vp.h))
+		vpX = iX;vpY = iY;vpW = iW;vpH = iH
+		SetViewport(vpX,vpY,vpW,vpH)
+	End Function
+	
+End Type

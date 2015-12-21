@@ -53,10 +53,8 @@ Type TGuiWidget Extends TGuiBase
 	Method ToFront()
 		Local root:TGuiBase = GetRootParent(Self.parent)
 		If root
-			DebugLog "There is a parent"
 			TGuiWidget(root).ChildsToFront()
 		Else
-			DebugLog "There is no parent"
 			ChildsToFront()
 		EndIf
 	End Method

@@ -5,6 +5,7 @@ Import BRL.Max2D
 Import BRL.PNGLoader
 Import "GuiWidgetFrame.bmx"
 Import "Color.bmx"
+Import "GuiUtilImage.bmx"
 
 Type TGuiWidgetTextbox Extends TGuiWidgetFrame
 
@@ -46,7 +47,11 @@ Type TGuiWidgetTextbox Extends TGuiWidgetFrame
 	End Method
 	
 	Method Render()
-		SetViewport(GetInnerWindowX(), GetInnerWindowY(), GetInnerWidth(), GetInnerHeight())
+		If parent
+				TGuiVP.Add(TGuiWidgetFrame(parent).GetInnerWindowX(), TGuiWidgetFrame(parent).GetInnerWindowY(), TGuiWidgetFrame(parent).GetInnerWidth(), TGuiWidgetFrame(parent).GetInnerHeight())
+			Else
+				TGuiVP.Add(GetInnerWindowX(), GetInnerWindowY(), GetInnerWidth(), GetInnerHeight())
+		EndIf
 		If (TGuiSystem.activeElement = Self)
 			SetColor($AA,$AA,$AA)
 		Else
@@ -104,7 +109,7 @@ Type TGuiWidgetTextbox Extends TGuiWidgetFrame
 			If (pos >= maxLen) Then Exit
 		Next
 		SetColor(255,255,255)
-		SetViewport(0,0,VirtualResolutionWidth(), VirtualResolutionHeight())
+		TGuiVP.Pop()
 		Super.Render()	
 	End Method
 	
@@ -113,7 +118,7 @@ Type TGuiWidgetTextbox Extends TGuiWidgetFrame
 	End Method
 	
 	Method DrawTopBar()
-		TUtilImage.DrawRepeated(topBar, GetX(), GetY(), rect.w, ImageHeight(topBar))		
+		TGuiUtilImage.DrawRepeated(topBar, GetX(), GetY(), rect.w, ImageHeight(topBar))		
 	End Method
 	
 	Method GetInnerHeight : Int()
@@ -121,7 +126,7 @@ Type TGuiWidgetTextbox Extends TGuiWidgetFrame
 	End Method
 	
 	Method DrawBottomBorder()
-		TUtilImage.DrawRepeated(bottomBorder, GetX(), GetY() + rect.h - ImageHeight(bottomBorder), rect.w, ImageHeight(bottomBorder))		
+		TGuiUtilImage.DrawRepeated(bottomBorder, GetX(), GetY() + rect.h - ImageHeight(bottomBorder), rect.w, ImageHeight(bottomBorder))		
 	End Method	
 
 	Method Update()
